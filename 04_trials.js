@@ -31,8 +31,8 @@ const nback = {
 	stimuli = [1,9,8,1,9,6,7,6,5,7]),
 	practice4: generate_nback(trials=20, n=4, pbait=(1/9),
 	stimuli = [5,3,2,1,1,3,8,1,7,5,1,6,7,1,4,6,3,4,4,2]),
-    normal: generate_nback(trials=50, n=4, pbait=(1/9)),
-	lure: generate_nback(trials=50,n=4,pbait=0.85)
+    normal: generate_nback(trials=80, n=4, pbait=(0.2),ptarget=(0.25)),
+	lure: generate_nback(trials=80,n=4,pbait=(0.5),ptarget=(0.25))
     }
 
 

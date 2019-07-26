@@ -67,8 +67,8 @@ const pre_practice3 = babeViews.view_generator(
 		trials: 1,
 		name: 'instructions',
 		title: 'Instructions - 3back ',
-		text:  'Just press "m" if the number is the same as the one before and "d" if it is not.',
-		buttonText: 'Start 1back practice'
+		text:  'Just as before, but this time press "m" if the number is the same as 3 numbers back.',
+		buttonText: 'Start 3back practice'
 	});
 
 const pre_practice4 = babeViews.view_generator(
@@ -78,7 +78,7 @@ const pre_practice4 = babeViews.view_generator(
 		name: 'instructions',
 		title: 'Instructions - 4back ',
 		text:  'The next practice run will will have the same configuration as the actual experiment. Indicate wether the number is the same as 4 numbers before.',
-		buttonText: 'Start the first Block'
+		buttonText: 'Start 4back practice'
 	});
 
 	
@@ -99,7 +99,7 @@ const post_block1 = babeViews.view_generator(
 		name: 'instructions',
 		title: 'End - Block 1',
 		text:  'First Block finished. One more to go. Continue once you feel ready.',
-		buttonText: 'Second Block'
+		buttonText: 'Start the second Block'
 	});
 
 
@@ -145,7 +145,7 @@ const nback_practice4 = babeViews.view_generator("key_press", {
 });
 
 const nback_normal = babeViews.view_generator("key_press", {
-	title:"Block",
+	title:"",
 	trials:nback.normal.length,
 	name:"nback_normal",
 	data:nback.normal
@@ -154,7 +154,7 @@ const nback_normal = babeViews.view_generator("key_press", {
 	handle_response_function:nback_response_handler
 });
 const nback_lure = babeViews.view_generator("key_press", {
-	title:"Block",
+	title:"",
 	trials:nback.lure.length,
 	name:"nback_lure",
 	data:nback.lure

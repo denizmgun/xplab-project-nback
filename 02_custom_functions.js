@@ -14,7 +14,7 @@ const coin = _.sample(["head", "tail"]); // You can determine global (random) pa
 */
 
 /* For generating nback trials */
-const generate_nback = function(trials=1, n=1, pbait=(1/9),stimuli=null) {
+const generate_nback = function(trials=1, n=1, pbait=(0.2),ptarget=0.8,stimuli=null) {
 	/**
 	* Generates the nback trials in a _babe conform format.
 	*
@@ -24,8 +24,9 @@ const generate_nback = function(trials=1, n=1, pbait=(1/9),stimuli=null) {
 	*@param {int}	trials	Number of trials.
 	*@param {int}	n 		How many stimuli ahead lies the target.
 	*@param {float} pbait	Probability of generating a "baiting" stimulus.
-	*@param {string}group   Name of the block or group, Expected: "normal" ,"lure" or "practice".
+	*@param {float}	ptarget Name of the block or group, Expected: "normal" ,"lure" or "practice".
 	*
+	*@param {object}stimuli Listlike object with numbers
 	*@return {object} An object containing all the trials in right order.
 	*/
 	
@@ -34,13 +35,18 @@ const generate_nback = function(trials=1, n=1, pbait=(1/9),stimuli=null) {
 	
 	if(stimuli == null){
 		for(i=0;i<trials;i++){
-			// add a "bait" with probability pbait
 			
-			if(i >= n && Math.random <= pbait){
+			// add a "target" with probability ptarget
+			if(i >= n && Math.random() <= ptarget){
+				console.log("Target call!")
+				target = files[i-n]
+				files.push(target)
+				
+			// else add bait with porbability pbait
+			} else if(i >= n && Math.random() <= pbait){
 				bait = files[i-n+1]
 				files.push(bait)
 				
-			
 			} else {
 				numb = String(Math.ceil(Math.random() * 9))
 				files.push("images/" + numb + ".png")
@@ -76,7 +82,7 @@ const generate_nback = function(trials=1, n=1, pbait=(1/9),stimuli=null) {
 		// add the stimulus to the list of trials ("nback_trials")
 		nback_trials.push(
 			{	
-				question: "<b>d</b> : different, <b>m</b>: match",
+				question: "",
 				picture: files[i],
 				key1: 'd',
 				key2: 'm',         
@@ -85,7 +91,9 @@ const generate_nback = function(trials=1, n=1, pbait=(1/9),stimuli=null) {
 				expected: type,
 				stim_type: stim_type, //****
 				ID:ID,
-				n:n
+				n:n,
+				pbait:pbait*(1-ptarget), // because pbait gets called after ptarget is checked therefore the probability of a bait is (1-ptarget*pbait)
+				ptarget:ptarget
 			}
 		)
 			
