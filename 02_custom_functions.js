@@ -44,7 +44,15 @@ const generate_nback = function(trials=1, n=1, pbait=(0.2),ptarget=0.8,stimuli=n
 				
 			// else add bait with porbability pbait
 			} else if(i >= n && Math.random() <= pbait){
-				bait = files[i-n+1]
+				// 0.5 chance to make it either a lure at n+1 or n-1
+				//at n+1
+				if(i > n+1 && Math.random() <= 0.5){
+					bait = files[i-n-1]
+				} else {
+				//at n-1
+					bait = files[i-n+1]
+				}
+				
 				files.push(bait)
 				
 			} else {
@@ -72,8 +80,8 @@ const generate_nback = function(trials=1, n=1, pbait=(0.2),ptarget=0.8,stimuli=n
 			type = "different";
 		}
 		
-		//determine wetehr it's a lure
-		if(files[i-n+1] == files[i]){
+		//determine whether it's a lure
+		if(files[i-n+1] == files[i] || files[i-n-1] == files[i]){
 				stim_type = "lure"
 			} else {
 				stim_type = "normal"
@@ -147,30 +155,6 @@ check_response = function(data, next) {
         next();
     })
 }
-
-const timeout_press = function(time){ 
-				setTimeout(function() {
-					var keyboardEvent = document.createEvent("KeyboardEvent");
-					var initMethod = typeof keyboardEvent.initKeyboardEvent !== 'undefined' ? "initKeyboardEvent" : "initKeyEvent";
-
-					keyboardEvent[initMethod](
-					  "keydown", // event type: keydown, keyup, keypress
-					  true,      // bubbles
-					  true,      // cancelable
-					  window,    // view
-					  false,     // ctrlKey
-					  false,     // altKey
-					  false,     // shiftKey
-					  false,     // metaKey
-					  111,        // keyCode: unsigned long - o
-					  0          // charCode: unsigned long - the Unicode
-					);
-					// Trigger keydown 
-					document.dispatchEvent(keyboardEvent);
-					console.log("Triggered")
-				}, time)
-			}	
-
 
 // Declare your hooks here
 
