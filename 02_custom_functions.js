@@ -148,30 +148,6 @@ check_response = function(data, next) {
     })
 }
 
-const timeout_press = function(time){ 
-				setTimeout(function() {
-					var keyboardEvent = document.createEvent("KeyboardEvent");
-					var initMethod = typeof keyboardEvent.initKeyboardEvent !== 'undefined' ? "initKeyboardEvent" : "initKeyEvent";
-
-					keyboardEvent[initMethod](
-					  "keydown", // event type: keydown, keyup, keypress
-					  true,      // bubbles
-					  true,      // cancelable
-					  window,    // view
-					  false,     // ctrlKey
-					  false,     // altKey
-					  false,     // shiftKey
-					  false,     // metaKey
-					  111,        // keyCode: unsigned long - o
-					  0          // charCode: unsigned long - the Unicode
-					);
-					// Trigger keydown 
-					document.dispatchEvent(keyboardEvent);
-					console.log("Triggered")
-				}, time)
-			}	
-
-
 // Declare your hooks here
 
 
