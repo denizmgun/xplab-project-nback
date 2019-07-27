@@ -20,7 +20,7 @@ $("document").ready(function() {
         views_seq: [
             intro,
             instructions,
-			/*pre_practice1,
+			pre_practice1,
 			nback_practice1,
 			pre_practice2,
 			nback_practice2,
@@ -29,7 +29,7 @@ $("document").ready(function() {
 			pre_practice4,
 			nback_practice4,
 			post_practice,
-            */block1,
+            block1,
 			post_block1,
 			//block2,
             post_test,

@@ -38,11 +38,10 @@ const generate_nback = function(trials=1, n=1, pbait=(0.2),ptarget=0.8,stimuli=n
 			
 			// add a "target" with probability ptarget
 			if(i >= n && Math.random() <= ptarget){
-				console.log("Target call!")
 				target = files[i-n]
 				files.push(target)
 				
-			// else add bait with porbability pbait
+			// else add bait with probability pbait
 			} else if(i >= n && Math.random() <= pbait){
 				// 0.5 chance to make it either a lure at n+1 or n-1
 				//at n+1
@@ -52,7 +51,6 @@ const generate_nback = function(trials=1, n=1, pbait=(0.2),ptarget=0.8,stimuli=n
 				//at n-1
 					bait = files[i-n+1]
 				}
-				
 				files.push(bait)
 				
 			} else {
@@ -90,7 +88,7 @@ const generate_nback = function(trials=1, n=1, pbait=(0.2),ptarget=0.8,stimuli=n
 		// add the stimulus to the list of trials ("nback_trials")
 		nback_trials.push(
 			{	
-				question: "",
+				question: "?",
 				picture: files[i],
 				key1: 'd',
 				key2: 'm',         
