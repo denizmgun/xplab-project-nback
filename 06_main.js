@@ -9,8 +9,14 @@ $("document").ready(function() {
     };
 	
 	
-	/* Randomize the order of blocks*/
-	blocks = [block_3back, block_4back]
+	/* Make a control trial with p=0.3*/
+	if(Math.random() < 0.3){
+		blocks = [block_3back, block_4back];
+	} else{
+		blocks = [block_3back_control, block_4back_control];
+	}
+	
+	// Randomize the order of blocks 
 	r = Math.round(Math.random()) // 0 or 1
 	block1 = blocks[r]
 	block2 = blocks[(r+1)%2]  // (0+1)%2 = 1, (1+1)%2=0 ~ the other
@@ -19,7 +25,7 @@ $("document").ready(function() {
     window.babe_monitor = babeInit({
         views_seq: [
             intro,
-            /*instructions,
+            instructions,
 			pre_practice1,
 			nback_practice1,
 			pre_practice2,
@@ -29,12 +35,12 @@ $("document").ready(function() {
 			post_practice,
 			block1.pre_practice,
 			block1.practice,
-			*/block1.post_practice,
-			/*block1.trials,
+			block1.post_practice,
+			block1.trials,
 			block2.pre_practice,
 			block2.practice,
 			block2.post_practice,
-			*/block2.trials,
+			block2.trials,
             post_test,
             thanks,
         ],
@@ -45,7 +51,7 @@ $("document").ready(function() {
             // Possible deployment methods are:
             // "debug" and "directLink"
             // As well as "MTurk", "MTurkSandbox" and "Prolific"
-            deployMethod: "debug",
+            deployMethod: "directLink",
             contact_email: "dguen@uos.de",
             prolificURL: "Unnecessary"
         },
@@ -54,6 +60,9 @@ $("document").ready(function() {
             in: [
                 // list the view-names of the views for which you want a progress bar
                 forced_choice_2A.name,
+				"control",
+				"main",
+				"practice"
             ],
              // Possible styles are "default", "separate" and "chunks"
             style: "separate",
