@@ -38,8 +38,8 @@ const generate_nback = function(trials=1, n=1, pbait=(0.2),ptarget=0.8,stimuli=n
 	/* Necessary correction, for pbait, because, let's say we want pbait =0.3. If that's the parameter value, the actual probability to get a bait would be
 	(1-parget) * 0.3, which is smaller than pbait.*/
 	pbait_corrected = pbait/(1-ptarget);
-	console.log("pbait:" + String(pbait) +" = (1-ptarget)*pbait_corrected")
-	console.log("pbait_corrected:" + String(pbait_corrected))
+	//console.log("pbait:" + String(pbait) +" = (1-ptarget)*pbait_corrected")
+	//console.log("pbait_corrected:" + String(pbait_corrected))
 	
 	files = [];
 	// Make a list with all numbers (and associated filepaths :: e.g. 'images/5.png')
