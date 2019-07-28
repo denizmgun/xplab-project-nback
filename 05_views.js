@@ -88,7 +88,7 @@ const post_practice = babeViews.view_generator(
 		trials: 1,
 		name: 'instructions',
 		title: 'General Instructions',
-		text:  'Now you have some time to rest.  If you feel like you did not understand how the task works, reload the page and practice again. \n If you continue here, you will work on two blocks with 50 numbers each. After the first block you can take a break again. Continue once you feel ready.',
+		text:  'Now you have some time to rest.  If you feel like you did not understand how the task works, reload the page and practice again. \n If you continue here, you will work on two blocks with 84 numbers each. Ther conditions are either 3back or 4back. Before each block you will have a short practice session again to get used to the condition. After the first block you can take a break again. Continue once you feel ready. ',
 		buttonText: 'Start the first Block'
 	});
 
@@ -103,11 +103,11 @@ const post_block1 = babeViews.view_generator(
 	});
 
 
-// main views 
+// Practice Views
 const nback_practice1 = babeViews.view_generator("key_press", {
 		title:"Practice - 1back",
 		trials:nback.practice1.length,
-		name:"nback_practice",
+		name:"practice",
 		data:nback.practice1
 },
 {
@@ -117,7 +117,7 @@ const nback_practice1 = babeViews.view_generator("key_press", {
 const nback_practice2 = babeViews.view_generator("key_press", {
 		title:"Practice - 2back",
 		trials:nback.practice2.length,
-		name:"nback_practice",
+		name:"practice",
 		data:nback.practice2
 },
 {
@@ -127,7 +127,7 @@ const nback_practice2 = babeViews.view_generator("key_press", {
 const nback_practice3 = babeViews.view_generator("key_press", {
 		title:"Practice - 3back",
 		trials:nback.practice3.length,
-		name:"nback_practice",
+		name:"practice",
 		data:nback.practice3
 },
 {
@@ -137,31 +137,156 @@ const nback_practice3 = babeViews.view_generator("key_press", {
 const nback_practice4 = babeViews.view_generator("key_press", {
 		title:"Practice - 4back",
 		trials:nback.practice4.length,
-		name:"nback_practice",
+		name:"practice",
 		data:nback.practice4
 },
 {
 		handle_response_function:nback_response_handler
 });
 
-const nback_normal = babeViews.view_generator("key_press", {
-	title:"",
-	trials:nback.normal.length,
-	name:"nback_normal",
-	data:nback.normal
+
+// 3back and 4back conditions for the main trials:
+
+// Pre and Post Practice Instructions for the Blocks
+
+const pre_practice_3back = babeViews.view_generator(
+	"instructions",
+	{
+		trials: 1,
+		name: 'instructions',
+		title: 'Final Instructions - 3back ',
+		text:  'Continue for final practice of the 3back task',
+		buttonText: 'Start final 3back practice'
+	});
+const pre_practice_4back = babeViews.view_generator(
+	"instructions",
+	{
+		trials: 1,
+		name: 'instructions',
+		title: 'Final Instructions - 4back ',
+		text:  'Continue for final practice of the 4back task',
+		buttonText: 'Start final 4back practice'
+	});
+	
+const post_practice_3back = babeViews.view_generator(
+	"instructions",
+	{
+		trials: 1,
+		name: 'post_practice_n3',
+		title: '',
+		text:  'Continue when you are ready. The next trials count. ',
+		buttonText: 'Start 3back block'
+	});
+
+const post_practice_4back = babeViews.view_generator(
+	"instructions",
+	{
+		trials: 1,
+		name: 'post_practice_n4',
+		title: '',
+		text:  'Continue when you are ready. The next trials count.',
+		buttonText: 'Start 4back block'
+	});	
+
+
+// Actual Practice Runs of the Blocks
+
+// n3 Last Practice
+const practice_3back = babeViews.view_generator("key_press", {
+		title:"Practice - 3back",
+		trials:nback.practice_n3final.length,
+		name:"practice",
+		data:nback.practice_n3final
 },
 {
-	handle_response_function:nback_response_handler
+		handle_response_function:nback_response_handler
 });
-const nback_lure = babeViews.view_generator("key_press", {
-	title:"",
-	trials:nback.lure.length,
-	name:"nback_lure",
-	data:nback.lure
+
+// n4 Last Practice
+const practice_4back = babeViews.view_generator("key_press", {
+		title:"Practice - 4back",
+		trials:nback.practice_n4final.length,
+		name:"practice",
+		data:nback.practice_n4final
 },
 {
-	handle_response_function:nback_response_handler
+		handle_response_function:nback_response_handler
 });
+
+//n3 Trials
+const trials_3back = babeViews.view_generator("key_press", {
+		title:"",
+		trials:nback.practice1.length,
+		name:"main",
+		data:nback.trials_n3
+},
+{
+		handle_response_function:nback_response_handler
+});	
+
+//n4 Trials
+const trials_4back = babeViews.view_generator("key_press", {
+		title:"",
+		trials:nback.practice1.length,
+		name:"main",
+		data:nback.trials_n4
+},
+{
+		handle_response_function:nback_response_handler
+});	
+
+//n3 control trials
+const control_trials_3back = babeViews.view_generator("key_press", {
+		title:"",
+		trials:nback.control_trials_n3.length,
+		name:"control",
+		data:nback.control_trials_n3
+},
+{
+		handle_response_function:nback_response_handler
+});	
+
+//n4 control trials
+const control_trials_4back = babeViews.view_generator("key_press", {
+		title:"",
+		trials:nback.control_trials_n4.length,
+		name:"control",
+		data:nback.control_trials_n4
+},
+{
+		handle_response_function:nback_response_handler
+});	
+	
+// Main View Bundles 
+const block_3back = {
+	pre_practice:pre_practice_3back,
+	practice:practice_3back,
+	post_practice:post_practice_3back,
+	trials:	control_trials_3back
+	
+}
+const block_4back = {
+	pre_practice:pre_practice_4back,
+	practice:practice_4back,
+	post_practice:post_practice_4back,
+	trials:	control_trials_4back
+	
+}
+
+const block_3back_control = {
+	pre_practice:pre_practice_3back,
+	practice:practice_3back,
+	post_practice:post_practice_3back,
+	trials:	trials_3back
+	
+}
+const block_4back_control = {
+	pre_practice:pre_practice_4back,
+	practice:practice_4back,
+	post_practice:post_practice_4back,
+	trials:	trials_4back
+	
+}
 
 
 // Ending Views

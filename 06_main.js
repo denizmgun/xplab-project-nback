@@ -9,29 +9,32 @@ $("document").ready(function() {
     };
 	
 	
-	/* Make the order of the normal and lure block random.*/
-	blocks = [nback_normal, nback_lure]
+	/* Randomize the order of blocks*/
+	blocks = [block_3back, block_4back]
 	r = Math.round(Math.random()) // 0 or 1
 	block1 = blocks[r]
-	block2 = blocks[(r+1)%2]  // (0+1)%2 = 1, (1+1)%2=0
+	block2 = blocks[(r+1)%2]  // (0+1)%2 = 1, (1+1)%2=0 ~ the other
 
     
     window.babe_monitor = babeInit({
         views_seq: [
             intro,
-            instructions,
+            /*instructions,
 			pre_practice1,
 			nback_practice1,
 			pre_practice2,
 			nback_practice2,
 			pre_practice3,
 			nback_practice3,
-			pre_practice4,
-			nback_practice4,
 			post_practice,
-            block1,
-			post_block1,
-			block2,
+			block1.pre_practice,
+			block1.practice,
+			*/block1.post_practice,
+			/*block1.trials,
+			block2.pre_practice,
+			block2.practice,
+			block2.post_practice,
+			*/block2.trials,
             post_test,
             thanks,
         ],
@@ -42,7 +45,7 @@ $("document").ready(function() {
             // Possible deployment methods are:
             // "debug" and "directLink"
             // As well as "MTurk", "MTurkSandbox" and "Prolific"
-            deployMethod: "directLink",
+            deployMethod: "debug",
             contact_email: "dguen@uos.de",
             prolificURL: "Unnecessary"
         },
