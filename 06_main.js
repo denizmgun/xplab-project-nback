@@ -32,6 +32,8 @@ $("document").ready(function() {
 			nback_practice2,
 			pre_practice3,
 			nback_practice3,
+			pre_practice4,
+			nback_practice4,
 			post_practice,
 			block1.pre_practice,
 			block1.practice,
@@ -51,7 +53,7 @@ $("document").ready(function() {
             // Possible deployment methods are:
             // "debug" and "directLink"
             // As well as "MTurk", "MTurkSandbox" and "Prolific"
-            deployMethod: "directLink",
+            deployMethod: "debug",
             contact_email: "dguen@uos.de",
             prolificURL: "Unnecessary"
         },
