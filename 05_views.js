@@ -28,7 +28,7 @@ const intro = babeViews.view_generator(
     name: 'intro',
 		// If you use JavaScripts Template String `I am a Template String`, you can use HTML <></> and javascript ${} inside
 		text:   `Hello,  on this site you are going to participate in a scientific experiment. The experiment will take approximately 8 to 12 minutes. It can be quite challenging and therefore requires you to be focused. If you have trained extensively on the nback task before, you are asked to not participate. Instructions are on the next page. <br><br> <b> Deutsch </b> <br> <br>
-		Hallo, auf dieser Seite nehmen Sie an einem wissenschaftlichen Experiment teil. Dies wird ungefähr 8 Minuten in Anspruch nehmen. Das Experiment könnte einigen relativ schwer fallen. Deshalb erfordert es Konzentration Ihrerseits. Falls Sie eine Art nback-Training absolviert haben, sollten Sie nicht an diesem Experiment teilnehmen. Falls Sie nicht wissen, was das ist, fahren Sie fort. Weitere Anweisungen sind auf der nächsten Seite`,
+		Hallo, auf dieser Seite nehmen Sie an einem wissenschaftlichen Experiment teil. Dies wird ungefähr 8 bis 12 Minuten in Anspruch nehmen. Das Experiment könnte einigen relativ schwer fallen. Deshalb erfordert es Konzentration Ihrerseits. Falls Sie eine Art nback-Training absolviert haben, sollten Sie nicht an diesem Experiment teilnehmen. Falls Sie nicht wissen, was das ist, fahren Sie fort. Weitere Anweisungen sind auf der nächsten Seite`,
 		buttonText: 'See instructions / Zeige Anweisungen '
 	});
 
