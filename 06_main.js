@@ -19,7 +19,7 @@ $("document").ready(function() {
 	// Randomize the order of blocks 
 	r = Math.round(Math.random()) // 0 or 1
 	block1 = blocks[r]
-	block2 = blocks[(r+1)%2]  // (0+1)%2 = 1, (1+1)%2=0 ~ the other
+	block2 = blocks[(r+1)%2]      // (0+1)%2 = 1, (1+1)%2=0 ~ the other
 
     
     window.babe_monitor = babeInit({
