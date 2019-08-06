@@ -16,3 +16,44 @@
 .custom-border {
    border: 1px solid powderblue;
 }
+
+/* In this file you can overwrite/extend the given babe-styles or declare your own ones */
+
+/* Example of extending a given babe-style */
+
+/*.babe-view-stimulus-container {
+    height: auto;
+    max-height: 350px;
+} */
+
+/* Display all titles in red */
+/*.babe-view-title {
+    color: red;
+}*/
+
+/* Example of declaring your own style */
+.custom-border {
+   border: 1px solid powderblue;
+}
+
+/* Increase Answer Button Size */
+.babe-response-buttons:hover {
+    background-color: #324D93;
+}
+.babe-response-buttons {
+    background-color: #5187BA;
+    border: none;
+    border-radius: 2px;
+    color: white;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Lato", "Noto Sans", sans-serif;
+    font-size: 24px;
+    line-height: 20px;
+    font-weight: 700;
+    letter-spacing: 0.9px;
+    margin: 0 5px 20px 5px;
+    outline: none;
+    padding: 10px 10px;
+    text-transform: uppercase;
+}
