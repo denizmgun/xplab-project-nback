@@ -36,7 +36,7 @@
    border: 1px solid powderblue;
 }
 
-@media only screen and (-webkit-min-device-pixel-ratio: 1.3){
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5){
 
 /* Center Views Containers */
 .babe-view{
@@ -82,7 +82,7 @@ div .babe-view-answer-container{
 }
 }
 
-@media only screen and (-webkit-max-device-pixel-ratio: 1.3){
+@media only screen and (-webkit-max-device-pixel-ratio: 1.5){
 
 /* Increase Answer Button Size */
 .babe-response-buttons:hover {
@@ -90,6 +90,10 @@ div .babe-view-answer-container{
 }
 .babe-response-buttons {
     display:none;
+}
+
+.babe-view{
+	margin-top:-1.5%;
 }
 
 }
