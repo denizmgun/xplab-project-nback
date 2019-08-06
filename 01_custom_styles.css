@@ -40,9 +40,20 @@
 
 /* Center Views Containers */
 .babe-view{
-    margin-top:10%;
-    margin-bottom:20%;
+   margin-left:5%;
+   margin-right:5%;
 }
+
+div .babe-view-picture {
+   margin-left:25%;
+   max-width:50%
+}
+
+div .babe-view-stimulus{
+   max-height:
+}
+
+
 /* Increase Answer Button Size */
 .babe-response-buttons:active {
     background-color: #002832;
@@ -55,17 +66,20 @@
     cursor: pointer;
     display: inline-block;
     font-family: "Lato", "Noto Sans", sans-serif;
-    font-size: 650%;
+    font-size: 350%;
     line-height: 20px;
     font-weight: bolder;
     letter-spacing: 0.9px;
     margin: 5%;
-    margin-top:25%;
+    margin-top:0%;
     outline: none;
-    padding: 6%;
+    padding: 10%;
     text-transform: uppercase;
 }
 
+div .babe-view-answer-container{
+    margin-top:-30%
+}
 }
 
 @media only screen and (-webkit-max-device-pixel-ratio: 1.3){
