@@ -51,9 +51,9 @@ const pre_practice1 = babeViews.view_generator(
 		trials: 1,
 		name: 'instructions',
 		title: 'Instructions - 1back ',
-		text:  `This practice session serves as an introduction. In the following <i> sample </i> sequence you would have to press "m" if a number is the same as one step back (indicated <b>boldly</b> here) and "d" if it is not: <br> <br> <i style="margin-left:40%;"> 1, 2, <b> 2 </b>, 7, 4, <b> 4 </b> </i> <br> <br>  After a number is displayed, you have 4 seconds to give an answer. If you use a keyboard, place your left index finger on "d" and your right index finger on "m" after clicking the button.
+		text:  `This practice session serves as an introduction. In the following sample sequence you would have to press "m" if a number is the same as one step back (indicated in <b>bold</b> font here) and "d" if it is not: <br> <br> <i style="margin-left:40%;"> 1, 2, <b> 2 </b>, 7, 4, <b> 4 </b> </i> <br> <br>  After a number is displayed, you have 4 seconds to give an answer. If you use a keyboard, place your left index finger on "d" and your right index finger on "m" after clicking the button.
 		<br><br> <b> Deutsch </b> <br> <br>
-		Diese Übung dient dem Einstieg. Drücken Sie "m', wenn die Zahl die gleiche ist wie einen Schritt zuvor; und "d", falls es sich um eine andere Zahl handelt. In dieser <i>Beispiel</i>-reihe müssten Sie bei den <b>fettgedruckten</b> Zahlen "m" und bei allen anderen "d" drücken:  <br><br> <i style="margin-left:40%"> 1, 2, <b> 2 </b>, 7, 4, <b> 4 </b> </i> <br><br> Nachdem eine Zahl erscheint, bleiben Ihnen 4 Sekunden um sich für eine Antwort zu entscheiden. Wenn Sie eine Tastatur verwenden, platzieren Sie Ihren linken Zeigefinger auf "d" und ihren rechten Zeigefinger auf "m" nach der Betätigung des Knopfes. `,
+		Diese Übung dient dem Einstieg. Drücken Sie "m', wenn die Zahl die gleiche ist wie einen Schritt zuvor; und "d", falls es sich um eine andere Zahl handelt. In dieser Beispielreihe müssten Sie bei den <b>fettgedruckten</b> Zahlen "m" und bei allen anderen "d" drücken:  <br><br> <i style="margin-left:40%"> 1, 2, <b> 2 </b>, 7, 4, <b> 4 </b> </i> <br><br> Nachdem eine Zahl erscheint, bleiben Ihnen 4 Sekunden um sich für eine Antwort zu entscheiden. Wenn Sie eine Tastatur verwenden, platzieren Sie Ihren linken Zeigefinger auf "d" und ihren rechten Zeigefinger auf "m" nach der Betätigung des Knopfes. `,
 		buttonText: `Start 1back practice / Beginne 1back Übung`
 	});
 	
@@ -64,9 +64,9 @@ const pre_practice2 = babeViews.view_generator(
 		trials: 1,
 		name: 'instructions',
 		title: 'Instructions - 2back ',
-		text:  `Just press "m" if the number is the same as 2 numbers back and "d" if it is not. Example: <br> <i style="margin-left:40%"> 1, 2, <b> 1 </b>, 3, 4, <b> 3 </b> </i>
+		text:  `Just press "m" if the number is the same as 2 numbers back and "d" if it is not. <br> Example: <br> <i style="margin-left:40%"> 1, 2, <b> 1 </b>, 3, 4, <b> 3 </b> </i>
 		<br><br> <b> Deutsch </b> <br> <br>
-		Drücken Sie diesmal einfach "m", wenn die gezeigte Zahl 2 Schritte zuvor auch gezeigt wurde.<br> Beispiel: <br><br>
+		Drücken Sie diesmal einfach "m", wenn die gezeigte Zahl 2 Schritte zuvor auch gezeigt wurde; und "d", wenn nicht. <br> Beispiel: <br><br>
 		<i style="margin-left:40%"> 1, 2, <b> 1 </b>, 3, 4, <b> 3 </b> </i> `,
 		buttonText: 'Start 2back practice / Beginne 2back Übung'
 	});
