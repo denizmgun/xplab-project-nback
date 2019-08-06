@@ -93,10 +93,8 @@ div .babe-view-answer-container p{
 
 
 
-/*  MOBILE - LANDSCAPE VIEW */
+/*  MOBILE - LANDSCAPE VIEW 
 @media only screen and (orientation: landscape){
-
-/* Center Views Containers */
 .babe-view{
    margin-left:14%;
    margin-right:5%;
@@ -151,7 +149,7 @@ div .babe-view-answer-container p{
 }
 }
 
-
+*/
 
 /* DESKTOP VIEW */
 
