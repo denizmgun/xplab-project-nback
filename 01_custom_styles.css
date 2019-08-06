@@ -146,8 +146,8 @@ div .babe-view-answer-container{
 }
 div .babe-view-answer-container p{
     font-family:sans-serif;
-	font-size:200%
-	margin-top:25%
+	font-size:200%;
+	margin-top:5%
 }
 }
 
@@ -169,4 +169,8 @@ div .babe-view-answer-container p{
 	margin-top:-1.5%;
 }
 
+div .babe-view-answer-container p{
+    font-family:sans-serif;
+	font-size:200%;
+}
 }

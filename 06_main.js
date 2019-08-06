@@ -25,10 +25,10 @@ $("document").ready(function() {
     window.babe_monitor = babeInit({
         views_seq: [
             intro,
-            /*instructions,
+            instructions,
 			pre_practice1,
-			*/nback_practice1,
-			/*pre_practice2,
+			nback_practice1,
+			pre_practice2,
 			nback_practice2,
 			pre_practice3,
 			nback_practice3,
@@ -43,7 +43,7 @@ $("document").ready(function() {
 			block2.practice,
 			block2.post_practice,
 			block2.trials,
-            */post_test,
+            post_test,
             thanks,
         ],
         // Here, you can specify all information for the deployment
@@ -53,7 +53,7 @@ $("document").ready(function() {
             // Possible deployment methods are:
             // "debug" and "directLink"
             // As well as "MTurk", "MTurkSandbox" and "Prolific"
-            deployMethod: "debug",
+            deployMethod: "directLink",
             contact_email: "dguen@uos.de",
             prolificURL: "Unnecessary"
         },
