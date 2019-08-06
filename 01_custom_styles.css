@@ -36,6 +36,13 @@
    border: 1px solid powderblue;
 }
 
+@media only screen and (-webkit-min-device-pixel-ratio: 1.3){
+
+/* Center Views Containers */
+.babe-view{
+    margin-top:10%;
+    margin-bottom:20%;
+}
 /* Increase Answer Button Size */
 .babe-response-buttons:hover {
     background-color: #324D93;
@@ -48,12 +55,27 @@
     cursor: pointer;
     display: inline-block;
     font-family: "Lato", "Noto Sans", sans-serif;
-    font-size: 24px;
+    font-size:-webkit-xxx-large;
     line-height: 20px;
-    font-weight: 700;
+    font-weight: bolder;
     letter-spacing: 0.9px;
-    margin: 0 5px 20px 5px;
+    margin: 5%;
+    margin-top:25%;
     outline: none;
-    padding: 10px 10px;
+    padding: 6%;
     text-transform: uppercase;
+}
+
+}
+
+@media only screen and (-webkit-max-device-pixel-ratio: 1.3){
+
+/* Increase Answer Button Size */
+.babe-response-buttons:hover {
+    background-color: #324D93;
+}
+.babe-response-buttons {
+    display:none;
+}
+
 }
