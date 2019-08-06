@@ -88,9 +88,9 @@ const nback_response_handler = function (config, CT, babe, answer_container_gene
         $(".babe-view").append(answer_container_generator(config, CT));
 		
         const handleKeyPress = function(e) {
-			console.log("HandleKeyPress called?")
-			console.log("HandleKeyPress Button is:")
-			console.log(e.which)
+			//console.log("HandleKeyPress called?")
+			//console.log("HandleKeyPress Button is:")
+			//console.log(e.which)
             const keyPressed = String.fromCharCode(
                 e.which
             ).toLowerCase();
@@ -179,14 +179,12 @@ const nback_response_handler = function (config, CT, babe, answer_container_gene
 				}, 400);
 					
 				} else {
-					console.log("Response came in time!")
+					//console.log("Response came in time!")
 				}
 				
 			},time);
 			
 		}
-		// This is within a timeout for stability reasons: to avoid the browser from registering too many keypresses and skipping a view 
-		setTimeout(function(){
 		
 		/* Register ButtonPress */
 		$("input[name=answer]").on("change", function() {
@@ -195,6 +193,8 @@ const nback_response_handler = function (config, CT, babe, answer_container_gene
 			buttonevent.which = key.charCodeAt(0);
 			handleKeyPress(buttonevent);
         });
+		// This is within a timeout for stability reasons: to avoid the browser from registering too many keypresses and skipping a view 
+		setTimeout(function(){
 		/* Register KeyPress */
         $("body").on("keydown", handleKeyPress);
 		
