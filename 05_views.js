@@ -28,7 +28,7 @@ const intro = babeViews.view_generator(
     name: 'intro',
 		// If you use JavaScripts Template String `I am a Template String`, you can use HTML <></> and javascript ${} inside
 		text:   `Hello,  on this site you are going to participate in a scientific experiment. The experiment will take approximately 8 to 12 minutes. It can be quite challenging and therefore requires you to be focused. If you have trained extensively on the nback task before, you are asked not to participate. Instructions are on the next page. <br><br> <b> Deutsch </b> <br> <br>
-		Hallo, auf dieser Seite nehmen Sie an einem wissenschaftlichen Experiment teil. Dies wird ungefähr 8 bis 12 Minuten in Anspruch nehmen. Das Experiment könnte einigen relativ schwer fallen. Deshalb erfordert es Konzentration Ihrerseits. Falls Sie eine Art nback-Training absolviert haben, sollten Sie nicht an diesem Experiment teilnehmen. Falls Sie nicht wissen, was das ist, fahren Sie fort. Weitere Anweisungen sind auf der nächsten Seite`,
+		Hallo, auf dieser Seite nehmen Sie an einem wissenschaftlichen Experiment teil. Dies wird ungefähr 8 bis 12 Minuten in Anspruch nehmen. Das Experiment könnte einigen relativ schwer fallen. Deshalb erfordert es Ihre konzentration. Falls Sie eine Art nback-Training absolviert haben, sollten Sie nicht an diesem Experiment teilnehmen. Falls Sie nicht wissen, was das ist, fahren Sie fort. Weitere Anweisungen sind auf der nächsten Seite`,
 		buttonText: 'See instructions / Zeige Anweisungen '
 	});
 
@@ -38,10 +38,9 @@ const instructions = babeViews.view_generator(
 		trials: 1,
 		name: 'instructions',
 		title: 'General Instructions',
-		text:  `First, you will absolve 3 practice sessions. These are followed by two real sessions. Your results in those last two sessions will be submitted.
-		In each session you will see a sequence of whole numbers between 1 and 9. At any moment, there will be only one number on the screen. Before each session there will be specific instructions for you. 
+		text:  `First, you will go through 3 practice blocks. These are followed by two larger test blocks. Your results from the last two blocks will be submitted. In each session you will see a sequence of whole numbers between 1 and 9. At any moment, there will be only one number on the screen. Before each session there will be specific instructions for you. 
 		<br> <br> <b> Deutsch </b> <br> <br>
-		Es folgen 3 Übungsdurchläufe und 2 Durchläufe, dessen Ergebnisse für das Experiment zählen. In jedem Duchlauf sehen Sie nacheinander einzelne Zahlen zwischen 1 und 9. Was genau Sie tun müssen, erfahren Sie vor jedem Durchlauf.
+		Es folgen 3 kurze Übungsblöcke. Danach folgen 2 Testblöcke, deren Ergebnisse für das Experiment gewertet werden. In jedem Durchlauf sehen Sie nach und nach einzelne Zahlen zwischen 1 und 9. Was genau Sie tun müssen, erfahren Sie vor jedem Durchlauf.
 		`,
 		buttonText: 'go to practice / zur Übung'
 	});
@@ -52,9 +51,9 @@ const pre_practice1 = babeViews.view_generator(
 		trials: 1,
 		name: 'instructions',
 		title: 'Instructions - 1back ',
-		text:  `This practice session serves as an introduction. In the following <i> sample </i> sequence you would have to press "m" if a number is the same as one step back and "d" if it is not.: <br> <br> <i style="margin-left:40%;"> 1, 2, <b> 2 </b>, 7, 4, <b> 4 </b> </i> <br> <br> Place your left index finger on "d" and your right index finger on "m" after clicking the button. After a number is displayed, you ahve 4 seconds to indicate an answer.
+		text:  `This practice session serves as an introduction. In the following <i> sample </i> sequence you would have to press "m" if a number is the same as one step back (indicated <b>boldly</b> here) and "d" if it is not: <br> <br> <i style="margin-left:40%;"> 1, 2, <b> 2 </b>, 7, 4, <b> 4 </b> </i> <br> <br>  After a number is displayed, you have 4 seconds to give an answer. If you use a keyboard, place your left index finger on "d" and your right index finger on "m" after clicking the button.
 		<br><br> <b> Deutsch </b> <br> <br>
-		Diese Übung dient dem Einstieg. Drücken Sie "m', wenn die Zahl die gleiche ist, wie einen Schritt zuvor und "d", falls es sich um eine andere Zahl handelt. In dieser <i>Beispiel</i> reihe müssten Sie bei den fettgedruckten Zahlen "m" und bei allen anderen "d" drücken.:  <br><br> <i style="margin-left:40%"> 1, 2, <b> 2 </b>, 7, 4, <b> 4 </b> </i> <br><br> Klicken Sie auf den Knopf und Platzieren Sie ihren linken Zeigefinger auf "d" und ihren rechten Zeigefinger auf "m". Nachdem eine Zahl erscheint, bleiben Ihnen 4 Sekunden um sich für eine Antwort zu entscheiden.`,
+		Diese Übung dient dem Einstieg. Drücken Sie "m', wenn die Zahl die gleiche ist wie einen Schritt zuvor; und "d", falls es sich um eine andere Zahl handelt. In dieser <i>Beispiel</i>-reihe müssten Sie bei den <b>fettgedruckten</b> Zahlen "m" und bei allen anderen "d" drücken:  <br><br> <i style="margin-left:40%"> 1, 2, <b> 2 </b>, 7, 4, <b> 4 </b> </i> <br><br> Nachdem eine Zahl erscheint, bleiben Ihnen 4 Sekunden um sich für eine Antwort zu entscheiden. Wenn Sie eine Tastatur verwenden, platzieren Sie Ihren linken Zeigefinger auf "d" und ihren rechten Zeigefinger auf "m" nach der Betätigung des Knopfes. `,
 		buttonText: `Start 1back practice / Beginne 1back Übung`
 	});
 	
