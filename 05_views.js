@@ -38,9 +38,9 @@ const instructions = babeViews.view_generator(
 		trials: 1,
 		name: 'instructions',
 		title: 'General Instructions',
-		text:  `First, you will go through 3 practice blocks. These are followed by two larger test blocks. Your results from the last two blocks will be submitted. In each session you will see a sequence of whole numbers between 1 and 9. At any moment, there will be only one number on the screen. Before each session there will be specific instructions for you. 
+		text:  `First, you will go through 4 short practice blocks. These are followed by two larger test blocks. Your results from the last two blocks will be submitted. In each session you will see a sequence of numbers between 1 and 9. At any moment, there will be only one number on screen. Before each session you will receive specific instructions. 
 		<br> <br> <b> Deutsch </b> <br> <br>
-		Es folgen 3 kurze Übungsblöcke. Danach folgen 2 Testblöcke, deren Ergebnisse für das Experiment gewertet werden. In jedem Durchlauf sehen Sie nach und nach einzelne Zahlen zwischen 1 und 9. Was genau Sie tun müssen, erfahren Sie vor jedem Durchlauf.
+		Es folgen 4 kurze Übungsblöcke. Danach folgen 2 Testblöcke, deren Ergebnisse für das Experiment gewertet werden. In jedem Durchlauf sehen Sie nach und nach einzelne Zahlen zwischen 1 und 9. Was genau Sie tun müssen, erfahren Sie vor jedem Durchlauf.
 		`,
 		buttonText: 'go to practice / zur Übung'
 	});
@@ -77,9 +77,9 @@ const pre_practice3 = babeViews.view_generator(
 		trials: 1,
 		name: 'instructions',
 		title: 'Instructions - 3back ',
-		text:  `Just as before, but this time press "m" if the number is the same as 3 numbers back.
+		text:  `Your task is the same as previously. But this time the target number is 3 steps back.
 		<br><br> <b> Deutsch </b> <br> <br>
-		Die gleiche Aufgabe, wie in der vorherigen Übung, doch diesmal liegt die Zahl 3 Schritte zurück.`,
+		Ihre Aufgabe ist die gleiche, wie in der vorherigen Übung. Doch diesmal liegt die Zahl 3 Schritte zurück.`,
 		buttonText: 'Start 3back practice / Beginne 3back Übung'
 	});
 
@@ -89,9 +89,9 @@ const pre_practice4 = babeViews.view_generator(
 		trials: 1,
 		name: 'instructions',
 		title: 'Instructions - 4back ',
-		text:  `Almost done, indicate wether the number is the same as 4 numbers back this time. 
+		text:  `Almost done, indicate whether the number is equal to the one shown 4 steps earlier. 
 		<br><br> <b> Deutsch </b> <br> <br>
-		Beinahe fertig, geben Sie diesmal an, ob die Zahl 4 Zahlen züruckliegt.`,
+		Beinahe fertig, geben Sie diesmal an, ob die gezeigte Zahl 4 Schritte züruckliegt.`,
 		buttonText: 'Start 4back practice'
 	});
 
@@ -102,9 +102,9 @@ const post_practice = babeViews.view_generator(
 		trials: 1,
 		name: 'instructions',
 		title: '',
-		text:  `Now you have some time to rest.  If you feel like you did not understand the task, refresh the page and practice again. \n If you continue here, you will work on two blocks with about 80 numbers each. Before each block you receive an explanation and an opportunity to practice. After the first block you can take a break again. 
+		text:  `Now you have some time to rest.  If you feel like you did not understand the task, refresh the page and practice again. \n If you continue here, you will work on two blocks with about 100 numbers each. Before each block you receive an explanation and an opportunity to practice. You can rest between the blocks. 
 		<br><br> <b> Deutsch </b> <br> <br>
-		Nun können Sie sich für einen Moment ausruhen. Wenn Sie das Gefühl haben, dass Sie Ihre Aufgabe nicht verstanden haben, laden Sie diese Seite neu und wiederholen Sie die Übungen. Wenn Sie von hier aus fortfahren, beginnt das eigentliche Experiment. Sie werden zwei Blöcke mit ca. 80 Zahlen bearbeiten. Vor jedem Block wird die neue Bedingung erklärt und kurz geübt. Zwischen den Blöcken können Sie sich ausruhen. `,
+		Nun können Sie sich für einen Moment ausruhen. Wenn Sie das Gefühl haben, dass Sie Ihre Aufgabe nicht verstanden haben, laden Sie diese Seite neu und wiederholen Sie die Übungen. Wenn Sie von hier aus fortfahren, beginnt das eigentliche Experiment. Sie werden zwei Blöcke mit ca. 100 Zahlen bearbeiten. Vor jedem Block wird die neue Bedingung erklärt und kurz geübt. Zwischen den Blöcken können Sie sich ausruhen. `,
 		buttonText: 'Start the first Block / Beginne mit dem ersten Block'
 	});
 
