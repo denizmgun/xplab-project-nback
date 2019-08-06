@@ -340,8 +340,10 @@ const post_test = babeViews.view_generator(
 	{
 		trials: 1,
 		name: 'post_test',
-		title: 'Additional information',
-		text: 'Answering the following questions is optional, but your answers will help us analyze our results. <br><br> Ihre Antworten auf diese Fragen sind optional, doch sie helfen uns mit der Auswertung der Ergebnisse.'
+		title: 'Submission',
+		text: `Please press the button below to submit your results. Answering the questions is optional but helps us analyze the results. <br><br> 
+		Betätigen Sie bitte den Knopf weiter unten, um Ihre Ergebnisse abzuschicken. Die folgenden Fragen sind optional, doch Sie helfen uns mit der Analyse der Ergebnisse.`,
+		buttonText:"Submit / Abschicken"
 	});
 	
 const thanks = babeViews.view_generator(
@@ -349,8 +351,8 @@ const thanks = babeViews.view_generator(
 	{
 		trials: 1,
 		name: 'thanks',
-		title: 'Thank you for taking part in this experiment! Please press the button. <br><br> Vielen Dank für Ihre Teilnahme an diesem Experment! Bitte klicken Sie auf den Knopf.',
-		prolificConfirmText: 'Press the button / Klick'
+		title: 'Thank you for your valuable contribution to this study! <br><br> Vielen Dank für Ihren wertvollen Beitrag zu dieser Studie! <br><br> The source code for this project is openly accessible at <a href="https://github.com/denizmguen/xplab-project-nback">GitHub</a>',
+		prolificConfirmText: 'Confirmed'
 }	);
 
 
