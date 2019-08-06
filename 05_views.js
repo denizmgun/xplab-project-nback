@@ -125,6 +125,7 @@ const nback_practice1 = babeViews.view_generator("key_press", {
 		title:"Practice - 1back",
 		trials:nback.practice1.length,
 		name:"practice",
+		pause:150,
 		data:nback.practice1
 },
 {
@@ -136,30 +137,36 @@ const nback_practice2 = babeViews.view_generator("key_press", {
 		title:"Practice - 2back",
 		trials:nback.practice2.length,
 		name:"practice",
+		pause:150,
 		data:nback.practice2
 },
 {
-		handle_response_function:nback_response_handler
+		handle_response_function:nback_response_handler,
+		answer_container_generator:nback_answer_container_generator
 });
 
 const nback_practice3 = babeViews.view_generator("key_press", {
 		title:"Practice - 3back",
 		trials:nback.practice3.length,
 		name:"practice",
+		pause:150,
 		data:nback.practice3
 },
 {
-		handle_response_function:nback_response_handler
+		handle_response_function:nback_response_handler,
+		answer_container_generator:nback_answer_container_generator
 });
 
 const nback_practice4 = babeViews.view_generator("key_press", {
 		title:"Practice - 4back",
 		trials:nback.practice4.length,
 		name:"practice",
+		pause:150,
 		data:nback.practice4
 },
 {
-		handle_response_function:nback_response_handler
+		handle_response_function:nback_response_handler,
+		answer_container_generator:nback_answer_container_generator
 });
 
 
@@ -222,10 +229,12 @@ const practice_3back = babeViews.view_generator("key_press", {
 		title:"Practice - 3back",
 		trials:nback.practice_n3final.length,
 		name:"practice",
+		pause:150,
 		data:nback.practice_n3final
 },
 {
-		handle_response_function:nback_response_handler
+		handle_response_function:nback_response_handler,
+		answer_container_generator:nback_answer_container_generator
 });
 
 // n4 Last Practice
@@ -233,10 +242,12 @@ const practice_4back = babeViews.view_generator("key_press", {
 		title:"Practice - 4back",
 		trials:nback.practice_n4final.length,
 		name:"practice",
+		pause:150,
 		data:nback.practice_n4final
 },
 {
-		handle_response_function:nback_response_handler
+		handle_response_function:nback_response_handler,
+		answer_container_generator:nback_answer_container_generator
 });
 
 //n3 Trials
@@ -244,10 +255,12 @@ const trials_3back = babeViews.view_generator("key_press", {
 		title:"",
 		trials:nback.practice1.length,
 		name:"main",
+		pause:150,
 		data:nback.trials_n3
 },
 {
-		handle_response_function:nback_response_handler
+		handle_response_function:nback_response_handler,
+		answer_container_generator:nback_answer_container_generator
 });	
 
 //n4 Trials
@@ -255,10 +268,12 @@ const trials_4back = babeViews.view_generator("key_press", {
 		title:"",
 		trials:nback.practice1.length,
 		name:"main",
+		pause:150,
 		data:nback.trials_n4
 },
 {
-		handle_response_function:nback_response_handler
+		handle_response_function:nback_response_handler,
+		answer_container_generator:nback_answer_container_generator
 });	
 
 //n3 control trials
@@ -266,10 +281,12 @@ const control_trials_3back = babeViews.view_generator("key_press", {
 		title:"",
 		trials:nback.control_trials_n3.length,
 		name:"control",
+		pause:150,
 		data:nback.control_trials_n3
 },
 {
-		handle_response_function:nback_response_handler
+		handle_response_function:nback_response_handler,
+		answer_container_generator:nback_answer_container_generator
 });	
 
 //n4 control trials
@@ -277,10 +294,12 @@ const control_trials_4back = babeViews.view_generator("key_press", {
 		title:"",
 		trials:nback.control_trials_n4.length,
 		name:"control",
+		pause:150,
 		data:nback.control_trials_n4
 },
 {
-		handle_response_function:nback_response_handler
+		handle_response_function:nback_response_handler,
+		answer_container_generator:nback_answer_container_generator
 });	
 	
 // Main View Bundles 
