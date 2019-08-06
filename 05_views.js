@@ -202,9 +202,9 @@ const post_practice_3back = babeViews.view_generator(
 		trials: 1,
 		name: 'post_practice_n3',
 		title: '',
-		text:  `You'll see 103 numbers. The first 3 answers wont count. Place your index fingers on "d" and "m" respectively after pressing the button. Continue when you are ready.
+		text:  `You'll see 103 numbers. The first 3 answers wont count. Place your index fingers (or thumbs) above "d" and "m" respectively after pressing the button. Continue when you are ready.
 		<br><br>
-		Es folgen 103 Zahlen. Die ersten 3 Antworten zählen nicht. Platzieren Sie Ihre Zeigefinger jeweils auf "d" und "m" nachdem Sie auf den Knopf geklickt haben. Fahren Sie fort, wenn Sie sich bereit fühlen.  `,
+		Es folgen 103 Zahlen. Die ersten 3 Antworten zählen nicht. Positionieren Sie Ihre Zeigefinger (oder Daumen) jeweils über "d" und "m" nachdem Sie auf den Knopf geklickt haben. Fahren Sie fort, wenn Sie sich bereit fühlen.  `,
 		buttonText: 'Start 3back block / Beginne 3back block'
 	});
 
@@ -214,9 +214,9 @@ const post_practice_4back = babeViews.view_generator(
 		trials: 1,
 		name: 'post_practice_n4',
 		title: '',
-		text:  `You'll see 104 numbers. The first 4 answers wont count. Place your index fingers on "d" and "m" respectively after pressing the button. Continue when you are ready.
+		text:  `You'll see 104 numbers. The first 4 answers wont count. Place your index fingers (or thumbs) above "d" and "m" respectively after pressing the button. Continue when you are ready.
 		<br><br>
-		Es folgen 104 Zahlen. Die ersten 4 Antworten zählen nicht. Platzieren Sie Ihre Zeigefinger jeweils auf "d" und "m" nachdem Sie auf den Knopf geklickt haben. Fahren Sie fort, wenn Sie sich bereit fühlen.  `,
+		Es folgen 104 Zahlen. Die ersten 4 Antworten zählen nicht. Positionieren Sie Ihre Zeigefinger (oder Daumen) jeweils über "d" und "m" nachdem Sie auf den Knopf geklickt haben. Fahren Sie fort, wenn Sie sich bereit fühlen.  `,
 		buttonText: 'Start 4back block / Beginne 4back Block'
 	});	
 
