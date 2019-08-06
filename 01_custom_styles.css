@@ -36,6 +36,10 @@
    border: 1px solid powderblue;
 }
 
+
+
+
+/* MOBILE VIEW PORTRAIT */
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5){
 
 /* Center Views Containers */
@@ -80,7 +84,76 @@ div .babe-view-stimulus{
 div .babe-view-answer-container{
     margin-top:-30%
 }
+div .babe-view-answer-container p{
+    font-family:sans-serif;
+	font-size:200%
 }
+
+}
+
+
+
+/*  MOBILE - LANDSCAPE VIEW */
+@media only screen and (orientation: landscape){
+
+/* Center Views Containers */
+.babe-view{
+   margin-left:14%;
+   margin-right:5%;
+   margin-top:-15%
+}
+
+div .progress-bar{
+    margin-top:15%;
+    margin-left:-10%;
+	position:absolute;
+}
+div .babe-view-picture {
+   max-width:50%
+}
+
+div .babe-view-stimulus{
+   max-height:
+}
+
+
+/* Increase Answer Button Size */
+.babe-response-buttons:active {
+    background-color: #002832;
+}
+.babe-response-buttons {
+    background-color: #5187BA;
+    border: none;
+    border-radius: 2px;
+    color: white;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Lato", "Noto Sans", sans-serif;
+    font-size: 350%;
+    line-height: 20px;
+    font-weight: bolder;
+    letter-spacing: 0.9px;
+    margin-left: 15%;
+    margin-right:15%;
+    margin-top:1%;
+    outline: none;
+    padding: 5%;
+    text-transform: uppercase;
+}
+
+div .babe-view-answer-container{
+    margin-top:-30%
+}
+div .babe-view-answer-container p{
+    font-family:sans-serif;
+	font-size:200%
+	margin-top:25%
+}
+}
+
+
+
+/* DESKTOP VIEW */
 
 @media only screen and (-webkit-max-device-pixel-ratio: 1.5){
 
