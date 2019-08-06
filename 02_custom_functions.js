@@ -179,6 +179,17 @@ check_response = function(data, next) {
 *
 */
 
+/* Modified answer_container_generator for nback: optional_button_choice + question*/
+const nback_answer_container_generator = function (config, CT) {
+        return `<div class='babe-view-answer-container'>
+                    <label for='o1' class='babe-response-buttons'>${config.data[CT].key1}</label>
+                    <input type='radio' name='answer' id='o1' value=${config.data[CT].key1} />
+                    <input type='radio' name='answer' id='o2' value=${config.data[CT].key2} />
+                    <label for='o2' class='babe-response-buttons'>${config.data[CT].key2}</label>
+                   </div>`
+}
+
+
 /* Modified handle response function of keypress for nback functionality */
 // modified handle_response_function of keypress for nback functionality
 const nback_response_handler = function (config, CT, babe, answer_container_generator, startingTime) {
@@ -190,11 +201,12 @@ const nback_response_handler = function (config, CT, babe, answer_container_gene
         $(".babe-view").append(answer_container_generator(config, CT));
 		
         const handleKeyPress = function(e) {
-			
+			console.log("HandleKeyPress called?")
+			console.log("HandleKeyPress Button is:")
+			console.log(e.which)
             const keyPressed = String.fromCharCode(
                 e.which
             ).toLowerCase();
-			
 			
             if (keyPressed === config.data[CT].key1 || keyPressed === config.data[CT].key2) {
 				response_in_time = true
@@ -231,9 +243,9 @@ const nback_response_handler = function (config, CT, babe, answer_container_gene
 				
 				//feedback for the user
 				if(correctness == "correct"){
-					$(".babe-view-question")[0].innerHTML="<p style='color:green'> <b>CORRECT"
+					$(".babe-view-answer-container")[0].innerHTML="<p style='color:green;font-size:20px;font-family:sans-serif;'> <b>CORRECT"
 				} else {
-					$(".babe-view-question")[0].innerHTML="<p style='color:red'> <b>INCORRECT"
+					$(".babe-view-answer-container")[0].innerHTML="<p style='color:red;font-size:20px;font-family:sans-serif;'> <b>INCORRECT"
 				};
 				
 				setTimeout( function() {
@@ -272,12 +284,12 @@ const nback_response_handler = function (config, CT, babe, answer_container_gene
 					babe.trial_data.push(trial_data);
 				
 					// Feedback for the user
-					$(".babe-view-question")[0].innerHTML="<p style='color:red'> <b>SLOW"
+					$(".babe-view-answer-container")[0].innerHTML="<p style='color:red'> <b>SLOW"
 					$("body").off("keydown", handleKeyPress);
 				
 				setTimeout( function() {
 					babe.findNextView();
-				}, 300);
+				}, 400);
 					
 				} else {
 					console.log("Response came in time!")
@@ -288,8 +300,18 @@ const nback_response_handler = function (config, CT, babe, answer_container_gene
 		}
 		// This is within a timeout for stability reasons: to avoid the browser from registering too many keypresses and skipping a view 
 		setTimeout(function(){
+		
+		/* Register ButtonPress */
+		$("input[name=answer]").on("change", function() {
+			var key = $("input[name=answer]:checked").val();
+			var buttonevent = new CustomEvent("buttoncheck");
+			buttonevent.which = key.charCodeAt(0);
+			handleKeyPress(buttonevent);
+        });
+		/* Register KeyPress */
         $("body").on("keydown", handleKeyPress);
-		// Trigger time out after everything has been loaded
+		
+		/* Trigger AutoPress (time out after everything has been loaded) */
 		trigger_time_limit()
 		}, 100)
     }
