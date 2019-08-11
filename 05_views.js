@@ -91,7 +91,7 @@ const pre_practice4 = babeViews.view_generator(
 		title: 'Instructions - 4back ',
 		text:  `Almost done, indicate whether the number is equal to the one shown 4 steps earlier. 
 		<br><br> <b> Deutsch </b> <br> <br>
-		Beinahe fertig, geben Sie diesmal an, ob die gezeigte Zahl 4 Schritte züruckliegt.`,
+		Beinahe fertig, geben Sie diesmal an, ob die gezeigte Zahl 4 Schritte zurückliegt.`,
 		buttonText: 'Start 4back practice'
 	});
 
@@ -102,7 +102,7 @@ const post_practice = babeViews.view_generator(
 		trials: 1,
 		name: 'instructions',
 		title: '',
-		text:  `Now you have some time to rest.  If you feel like you did not understand the task, refresh the page and practice again. \n If you continue here, you will work on two blocks with about 100 numbers each. Before each block you receive an explanation and an opportunity to practice. You can rest between the blocks. 
+		text:  `Now you have some time to rest.  If you feel like you did not understand the task, reload the page and practice again. \n If you continue here, you will work on two blocks with about 100 numbers each. Before each block you receive an explanation and an opportunity to practice. You can rest inbetween the blocks. 
 		<br><br> <b> Deutsch </b> <br> <br>
 		Nun können Sie sich für einen Moment ausruhen. Wenn Sie das Gefühl haben, dass Sie Ihre Aufgabe nicht verstanden haben, laden Sie diese Seite neu und wiederholen Sie die Übungen. Wenn Sie von hier aus fortfahren, beginnt das eigentliche Experiment. Sie werden zwei Blöcke mit ca. 100 Zahlen bearbeiten. Vor jedem Block wird die neue Bedingung erklärt und kurz geübt. Zwischen den Blöcken können Sie sich ausruhen. `,
 		buttonText: 'Start the first Block / Beginne mit dem ersten Block'
@@ -202,9 +202,9 @@ const post_practice_3back = babeViews.view_generator(
 		trials: 1,
 		name: 'post_practice_n3',
 		title: '',
-		text:  `You'll see 103 numbers. The first 3 answers wont count. Place your index fingers (or thumbs) above "d" and "m" respectively after pressing the button. Continue when you are ready.
+		text:  `You'll see 103 numbers. The first 3 answers wont count. Place your index fingers (or thumbs for handheld devices) above "d" and "m" respectively after pressing the button. Continue when you are ready.
 		<br><br>
-		Es folgen 103 Zahlen. Die ersten 3 Antworten zählen nicht. Positionieren Sie Ihre Zeigefinger (oder Daumen) jeweils über "d" und "m" nachdem Sie auf den Knopf geklickt haben. Fahren Sie fort, wenn Sie sich bereit fühlen.  `,
+		Es folgen 103 Zahlen. Die ersten 3 Antworten zählen nicht. Positionieren Sie Ihre Zeigefinger (oder Daumen für Smartphones o.ä.) jeweils über "d" und "m" nachdem Sie auf den Knopf geklickt haben. Fahren Sie fort, wenn Sie sich bereit fühlen.  `,
 		buttonText: 'Start 3back block / Beginne 3back block'
 	});
 
@@ -214,9 +214,9 @@ const post_practice_4back = babeViews.view_generator(
 		trials: 1,
 		name: 'post_practice_n4',
 		title: '',
-		text:  `You'll see 104 numbers. The first 4 answers wont count. Place your index fingers (or thumbs) above "d" and "m" respectively after pressing the button. Continue when you are ready.
+		text:  `You'll see 104 numbers. The first 4 answers wont count. Place your index fingers (or thumbs for handheld devices) above "d" and "m" respectively after pressing the button. Continue when you are ready.
 		<br><br>
-		Es folgen 104 Zahlen. Die ersten 4 Antworten zählen nicht. Positionieren Sie Ihre Zeigefinger (oder Daumen) jeweils über "d" und "m" nachdem Sie auf den Knopf geklickt haben. Fahren Sie fort, wenn Sie sich bereit fühlen.  `,
+		Es folgen 104 Zahlen. Die ersten 4 Antworten zählen nicht. Positionieren Sie Ihre Zeigefinger (oder Daumen für Smartphones o.ä.) über "d" und "m" nachdem Sie auf den Knopf geklickt haben. Fahren Sie fort, wenn Sie sich bereit fühlen.  `,
 		buttonText: 'Start 4back block / Beginne 4back Block'
 	});	
 
@@ -340,7 +340,7 @@ const post_test = babeViews.view_generator(
 		trials: 1,
 		name: 'post_test',
 		title: 'Submission',
-		text: `Please press the button below to submit your results. Answering the questions is optional but helps us analyze the results. If you'd like receive your result, leave your email adress in the comment field. You will receive an email once enough participants have taken the test. <br><br> 
+		text: `Please press the button below to submit your results. Answering the questions is optional but helps us analyze the results. If you'd like receive your result, leave your email adress in the comment field. You will receive an email once enough participants have taken the test. <br><br> <br><br> 
 		Betätigen Sie bitte den Knopf weiter unten, um Ihre Ergebnisse abzuschicken. Die folgenden Fragen sind optional, doch Sie helfen uns mit der Analyse der Ergebnisse. Wenn Sie wissen möchten, wie Sie im Vergleich zu den anderen Teilnehmern abgeschnitten haben, hinterlassen Sie Ihre E-Mail Adresse in der Kommentarbox. Sie erhalten eine E-Mail sobald genügend Leute an dem Experiment teilgenommen haben.`,
 		buttonText:"Submit / Abschicken"
 	});
