@@ -340,8 +340,8 @@ const post_test = babeViews.view_generator(
 		trials: 1,
 		name: 'post_test',
 		title: 'Submission',
-		text: `Please press the button below to submit your results. Answering the questions is optional but helps us analyze the results. <br><br> 
-		Betätigen Sie bitte den Knopf weiter unten, um Ihre Ergebnisse abzuschicken. Die folgenden Fragen sind optional, doch Sie helfen uns mit der Analyse der Ergebnisse.`,
+		text: `Please press the button below to submit your results. Answering the questions is optional but helps us analyze the results. If you'd like receive your result, leave your email adress in the comment field. You will receive an email once enough participants have taken the test. <br><br> 
+		Betätigen Sie bitte den Knopf weiter unten, um Ihre Ergebnisse abzuschicken. Die folgenden Fragen sind optional, doch Sie helfen uns mit der Analyse der Ergebnisse. Wenn Sie wissen möchten, wie Sie im Vergleich zu den anderen Teilnehmern abgeschnitten haben, hinterlassen Sie Ihre E-Mail Adresse in der Kommentarbox. Sie erhalten eine E-Mail sobald genügend Leute an dem Experiment teilgenommen haben.`,
 		buttonText:"Submit / Abschicken"
 	});
 	
