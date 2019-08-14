@@ -252,7 +252,7 @@ const practice_4back = babeViews.view_generator("key_press", {
 //n3 Trials
 const trials_3back = babeViews.view_generator("key_press", {
 		title:"",
-		trials:nback.practice1.length,
+		trials:nback.trials_n3.length,
 		name:"main",
 		pause:150,
 		data:nback.trials_n3
@@ -265,7 +265,7 @@ const trials_3back = babeViews.view_generator("key_press", {
 //n4 Trials
 const trials_4back = babeViews.view_generator("key_press", {
 		title:"",
-		trials:nback.practice1.length,
+		trials:nback.trials_n4.length,
 		name:"main",
 		pause:150,
 		data:nback.trials_n4
