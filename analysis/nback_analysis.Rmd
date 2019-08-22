@@ -1,0 +1,393 @@
+---
+title: "NBACK AND LURES - Statistical Analysis"
+date: 'Thursday,  August 1 08:00 CET'
+author: "Deniz Guen"
+output: html_document
+---
+
+# Required R packages
+* `tidyverse` (or `ggplot2`, `dplyr`, `purrr`, `tibble`)
+* `brms`
+* `faintr`
+* `EnvStats`
+
+
+
+### Importing Libraries
+
+```{r setup, include=FALSE, echo = FALSE, message = FALSE}
+"knitr::opts_chunk$set(echo=TRUE, 
+                      warning=FALSE,
+                      message=FALSE, 
+                      collapse = TRUE,
+                      cache = TRUE,
+                      dev.args = list(bg = 'transparent'), 
+                      fig.align='center', 
+                      fig.height = 3, 
+                      fig.widht=4)"
+require(rmdformats)
+require(tidyverse)
+require(brms)
+require(faintr)
+require(parallel)
+require(EnvStats)
+options(mc.cores = parallel::detectCores()-1)
+
+#theme_set(theme_bw() + theme(plot.background=element_blank()) )
+```
+
+### Setting seed for pseudo random operations
+```{r seed}
+set.seed(123) # this ensures that any psuedo-random computations are always the same
+```
+
+
+
+# Description
+This file is a documentation of the statistical procedures that were used to analyse the data from the nback experiment that was deployed for the report 'The Importance of controlling for lure foils in nback tasks' by Deniz M. Gün
+
+
+### Background: nback task
+In the nback task participants are shown a sequence of stimuli. For every stimulus the participants have to indicate wether the same stimulus has been presented exactly n steps earlier. There are different variants that may require participants to pay attention to more than one modality at the same time (e.g. shape and color or number and sound). But for this experiment a simple variant was chosen.
+
+The participants absolved 3- and 4back tasks with 100 trials for each, where the stimuli were integers between 1 and 9. They had 4 seconds to respond for each stimulus
+
+
+### Purpose
+This experiment is supposed to demonstrate that the accuracy is significantly worse for lure foils than for non-targets and thus that the overall accuracy may depend on the amount of lure foils and targets present in the data. Therefore, when deploying the nback task, the frequency of lure foils is a parameter that needs to be controlled in order to make sure that interpersonal differences are truly a result of ability and not the frequency of lure foils. 
+___
+
+
+
+
+
+
+# 1. Overview
+
+#### Importing data
+```{r Import Data,message=TRUE, warning=TRUE, tidy=FALSE}
+data = data.frame(read.csv("fake_data.csv"))
+head(data)
+```
+
+# 2. Data Cleaning
+
+
+
+
+#### Removing non-pertinent data (practice sessions)
+This includes every trial number smaller than n. Taking the 4back task for example, a target can not appear before the 4th trial.
+
+```{r DataClean1}
+data_pertinent = subset(data, trial_name != "practice" & trial_number > n)
+```
+
+
+
+
+
+
+#### Removing irrelevant columns
+
+```{r RelevantColumns}
+data = subset(data_pertinent, select= c(stim_type,correctness,RT,trial_name,n,trial_number,submission_id))
+```
+
+
+
+
+
+
+#### Removing obviously Faulty Trials 
+###### Subjects with less than 200 trials overall:
+```{r Grouping}
+grouped = count(group_by(data, submission_id))
+ids_faulty = filter(grouped, n < 200)$submission_id
+data = subset(data, !(submission_id %in% ids_faulty))
+```
+
+
+
+
+
+#### Removing outliers with respect to Reaction Times (applying Rosner Test)
+Should there be outliers, all entries for a specific submission ID will be removed
+```{r Outlier Detection}
+mean_rts = aggregate(data$RT, list(data$submission_id, data$n), mean)
+
+
+outliers = rosnerTest(mean_rts$x, alpha=0.05)
+
+outliers[12]
+
+```
+
+
+
+
+#### Adding column stim_type_gross
+
+```{r Add gross stimtype}
+gross = data$stim_type
+gross = ifelse(data$stim_type %in% c("non-target", "target"), "non-lure", "lure")
+data$gross_stimtype = gross
+```
+
+
+
+
+
+#### Creating a table with accuracy for different IDs and stimuli
+
+###### The grouping is important for counting the stimuli for a specific combination of values (e.g.: ID = 1, stim_type = "non-target", correctness = "correct", n=3, etc..)  such that the acuracy for a specific kind of stimulus can be calculated.
+
+```{r count group members}
+#Grouping by ID stim type, trial name and n --- 'nn' is the total number of trials for the specific variable combination of each row
+grouped1 = data %>% group_by(submission_id,stim_type,gross_stimtype,trial_name,n)
+cg1 = count(grouped1)
+#Grouping by correctness for counts of "correct" or "incorrect" --- 'nn' is number of correct trials for the specific variable combination of each row
+grouped2 = grouped1 %>% group_by(correctness, add=TRUE)
+cg2 = count(grouped2)
+# Getting list with unique values to iterate through in the following cells
+IDs = unique(grouped1$submission_id)
+stim_types = unique(grouped1$stim_type)
+gross_stimtypes=unique(grouped1$gross_stimtype)
+trial_names = c("main", "control")
+N = c("3", "4")
+```
+
+
+
+##### Creating an accuracy table template
+
+```{r Accuracy Table template}
+# Accuracy table must be atable with 6 rows: ID, trial_name, n, stimulus_type, gross_stimulus_type and accuracy
+accuracy_table <- data.frame(matrix(ncol = 6, nrow = 0))
+colnames(accuracy_table) <- c("ID","trial_name", "stimulus_type","gross_stimulus_type","n", "accuracy")
+
+# Defining the right variable types for cols.
+accuracy_table$accuracy <- as.numeric(accuracy_table$accuracy)
+accuracy_table$n <- as.factor(accuracy_table$n)
+
+```
+
+
+
+#### Filling Accuracy Tables
+
+###### Fill accu_id
+
+```{r Fill Accu ID}
+
+accu_id = subset(accuracy_table, select=c(ID,trial_name,n,accuracy)) # seperate n's
+
+for(id in IDs){
+  for(n in N){
+    howmanyback = n
+    trial_name = filter(data,submission_id==id)$trial_name[1]
+    n_correct = filter(cg2, (submission_id == id) && (n == howmanyback & correctness == "correct"))$nn
+    n_correct = sum(n_correct)
+    #print(n_correct)
+    n_total = 100
+    accuracy = n_correct/n_total
+
+
+    entry = data.frame(submission_id=id, trial_name=trial_name, n=n, accuracy=accuracy)
+    accu_id <- rbind(accu_id, entry)
+  }
+}
+
+head(accu_id)
+```
+
+
+
+
+
+###### Fill accuracy table for gross stimtypes
+
+```{r Fill Accu Gross Stimtype}
+
+accu_gross_stimtype = subset(accuracy_table, select=c(gross_stimulus_type,accuracy)) # can not seperate (howmany)n's(back) is independent from gross_stimtype
+
+
+for(gr in gross_stimtypes){
+  n_correct = sum(filter(cg2, gross_stimtype==gr && correctness=="correct")$nn)
+  n_total = sum(filter(cg2, gross_stimtype==gr)$nn)
+  accuracy = n_correct/n_total
+
+  entry = data.frame(gross_stimulus_type = gr, accuracy = accuracy)
+  accu_gross_stimtype <- rbind(accu_gross_stimtype, entry) 
+}
+
+head(accu_gross_stimtype)
+```
+
+
+
+
+
+
+###### Fill accuracy table for stimtypes
+
+```{r Fill Accu Stimtype}
+
+accu_stimtype = subset(accuracy_table, select=c(stimulus_type,accuracy)) # seperate n's
+
+for(st in stim_types){
+  n_correct = sum(filter(cg2, stim_type==st && correctness=="correct")$nn)
+  n_total = sum(filter(cg2, stim_type==st)$nn)
+  accuracy = n_correct/n_total
+  
+  entry = data.frame(stimulus_type = st, accuracy = accuracy)
+  accu_stimtype <- rbind(accu_stimtype, entry) 
+}
+
+head(accu_stimtype)
+```
+
+
+
+
+
+
+###### Filling a complete accuracy table
+
+```{r Fill Accu Stimtype seperated by n}
+accu_stimtype_by_n = subset(accuracy_table, select=c(stimulus_type,n,accuracy)) # can't seperate n's
+
+for(st in stim_types){
+  for(n in N){
+    howmanyback = n
+    n_correct = sum(filter(cg2, (stim_type == st && n==howmanyback) && correctness=="correct")$nn)
+    n_total = sum(filter(cg2,stim_type==st & n==howmanyback)$nn)
+    accuracy = n_correct/n_total
+    
+    entry = data.frame(stimulus_type=st,n=n, accuracy=accuracy)
+    accu_stimtype_by_n <- rbind(accu_stimtype_by_n, entry) 
+  }
+}
+
+head(accu_stimtype_by_n)
+```
+
+
+
+
+
+###### Fill a complete accuracy ordered on all relevant variables.
+
+```{r Fill a complete accu table}
+accu_complete <- subset(accuracy_table, select=c(ID, trial_name, stimulus_type, gross_stimulus_type, n, accuracy))
+
+for(id in IDs){
+  for(n in N){
+    for(st in stim_types){
+    
+      howmanyback = n
+      trial_name = filter(data,submission_id==id)$trial_name[1]
+      gr_st = filter(data, stim_type == st)$gross_stimtype[1]
+      n_correct = sum( filter(cg2, (submission_id == id && stim_type == st) && (n == howmanyback && correctness == "correct"))$nn )
+      n_total = sum( filter(cg2, (submission_id == id && n == howmanyback)&&stim_type == st)$nn )
+      accuracy = n_correct/n_total
+      
+      entry = data.frame(submission_id = id, trial_name = trial_name, stimulus_type = st, gross_stimulus_type = gr_st, n = howmanyback, accuracy = accuracy, count = n_total)
+      accu_complete <- rbind(accu_complete, entry)
+    }
+  }
+}
+
+head(accu_complete)
+```
+
+
+
+
+
+
+
+# 3. Hypothesis Tests
+
+#### The proposed hypotheses were
+
+
+H1 : The accuracy for lure foils (at n-1 as well as at n+1) is lower than the accuracy of non-targets. 
+
+H2: The accuracy of targets is worse than the accuracy of non-targets
+
+
+
+
+###### Getting an Overview
+
+```{r Boxplot Accuracy}
+ggplot(accu_complete,mapping=aes(x=stimulus_type, y=accuracy, color=n))+
+  geom_boxplot()
+```
+
+
+
+
+
+
+##### Variables
+Dependent: Accuracy
+Independent: trial_name, (gross_)stimulus_type, id, n, gros
+
+```{r Setting Variable Types}
+accu_complete$submission_id <- as.factor(accu_complete$submission_id)
+accu_complete$n <- as.factor(accu_complete$n)
+head(accu_complete)
+```
+
+### Model
+
+Creating clusters for parallel computing first
+```{r Creating Cluster}
+numCores = max(1, detectCores()-1)
+cl = makeCluster(numCores)
+clusterSetRNGStream(cl, 123)
+```
+
+```{r Regression Formulas}
+formula_acc_st = accuracy ~ stimulus_type
+formula_acc_gst = accuracy ~ gross_stimulus_type
+clusterExport(cl, varlist=c("accu_complete", "formula_acc_st", "formula_acc_gst"))
+```
+
+
+```{r}
+
+```
+
+
+
+
+
+Importing libraries into cluster
+```{r Importing Libraries into cluster}
+clusterEvalQ(cl, {
+  require(brms)
+  require(tidyverse)
+  }
+)
+
+```
+
+
+
+
+
+Running the model within the cluster
+```{r Creating brms model within cluster}
+clusterEvalQ(cl, {
+  model_stim_type = brm(formula_acc_st, accu_complete)
+  #model_g_stim_type = brm(formula_acc_gst, accu_complete)
+  model_stim_type
+  }
+)
+```
+
+
+
+
