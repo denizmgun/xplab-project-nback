@@ -205,7 +205,7 @@ const pre_practice_3back = babeViews.view_generator(
 		name: 'instructions',
 		title: 'Final Instructions - 3back ',
 		text:  `Indicate whether the number matches the one from 3 steps back. This is your last opportunity to practice.
-		<br><br>
+		<br><br> <b> Deutsch </b> <br> <br>
 		Geben Sie an, ob die Zahl dieselbe ist, wie 3 Schritte zuvor. Der nächste Durchlauf bietet die letzte Gelegenheit, um dies zu üben. ` ,
 		buttonText: 'Start final 3back practice / Beginne letzte 3back Übung'
 	});
@@ -216,7 +216,7 @@ const pre_practice_4back = babeViews.view_generator(
 		name: 'instructions',
 		title: 'Final Instructions - 4back ',
 		text:  `Indicate wether the number matches the one from 4 steps back. The next session will be your last opportunity to practice.
-		<br><br>
+		<br><br> <b> Deutsch </b> <br> <br>
 		Geben Sie an, ob die Zahl dieselbe ist, wie 4 Schritte zuvor. Der nächste Durchlauf bietet die letzte Gelegenheit, um dies zu üben. `,
 		buttonText: 'Start final 4back practice / Beginne letzt 4back Übung'
 	});
@@ -227,9 +227,9 @@ const post_practice_3back = babeViews.view_generator(
 		trials: 1,
 		name: 'post_practice_n3',
 		title: '3back Block',
-		text:  `Like you have practiced just now, you need to indicate wether the number is the same one as 3 steps back. You'll see 103 numbers. The first 3 answers wont count. Place your index fingers (or thumbs for handheld devices) above "d" and "m" respectively after pressing the button. Continue when you are ready.
-		<br><br>
-		Genau wie gerade geübt, müssen Sie nun angeben, ob die Zahl dieselbe ist, wie 3 Schritte zuvor. Es folgen 103 Zahlen. Die ersten 3 Antworten zählen nicht. Positionieren Sie Ihre Zeigefinger (oder Daumen für Smartphones o.ä.) jeweils über "d" und "m" nachdem Sie auf den Knopf geklickt haben. Fahren Sie fort, wenn Sie sich bereit fühlen.  `,
+		text:  `Like you have practiced just now, you need to indicate wether the number is the same one as 3 steps back. You'll see 103 numbers. The first 3 answers wont count. Continue when you are ready.
+		<br><br> <b> Deutsch </b> <br> <br>
+		Genau wie gerade geübt, müssen Sie nun angeben, ob die Zahl dieselbe ist, wie 3 Schritte zuvor. Es folgen 103 Zahlen. Die ersten 3 Antworten zählen nicht. Fahren Sie fort, wenn Sie sich bereit fühlen.  `,
 		buttonText: 'Start 3back block / Beginne 3back block'
 	});
 
@@ -239,9 +239,9 @@ const post_practice_4back = babeViews.view_generator(
 		trials: 1,
 		name: 'post_practice_n4',
 		title: '4back Block',
-		text:  `Like you have practiced just now, you need to indicate wether the number is the same one as 4 steps back. You'll see 104 numbers. The first 4 answers wont count. Place your index fingers (or thumbs for handheld devices) above "d" and "m" respectively after pressing the button. Continue when you are ready.
-		<br><br>
-		Genau wie gerade geübt, müssen Sie nun angeben, ob die Zahl dieselbe ist, wie 4 Schritte zuvor. Es folgen 104 Zahlen. Die ersten 4 Antworten zählen nicht. Positionieren Sie Ihre Zeigefinger (oder Daumen für Smartphones o.ä.) über "d" und "m" nachdem Sie auf den Knopf geklickt haben. Fahren Sie fort, wenn Sie sich bereit fühlen.  `,
+		text:  `Like you have practiced just now, you need to indicate wether the number is the same one as 4 steps back. You'll see 104 numbers. The first 4 answers wont count. Continue when you are ready.
+		<br><br> <b> Deutsch </b> <br> <br>
+		Genau wie gerade geübt, müssen Sie nun angeben, ob die Zahl dieselbe ist, wie 4 Schritte zuvor. Es folgen 104 Zahlen. Die ersten 4 Antworten zählen nicht. Fahren Sie fort, wenn Sie sich bereit fühlen.  `,
 		buttonText: 'Start 4back block / Beginne 4back Block'
 	});	
 
