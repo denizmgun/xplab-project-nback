@@ -77,9 +77,9 @@ const pre_practice3 = babeViews.view_generator(
 		trials: 1,
 		name: 'instructions',
 		title: 'Instructions - 3back ',
-		text:  `This practice session serves as an introduction. In the following sample sequence you would have to press "m" if a number is the same as 3 steps back (indicated in <b>bold</b> font here) and "d" if it is not: <br> <br> <i style="margin-left:40%;"> 2, 1, 3, <b> 2 </b>, 7, <b> 3 </b>, 4, 6, 9, <b> 4 </b> </i> <br> <br>  After a number is displayed, you have 4 seconds to give an answer.
+		text:  `This practice session serves as an introduction. In the following sample sequence you would have to press "m" if a number is the same as 3 steps back (indicated in <b>bold</b> font here) and "d" if it is not: <br> <br> <i style="margin-left:40%;"> 2, 1, 3, <b> 2</b>, 7, <b> 3</b>, 4, 6, 9, <b> 4 </b> </i> <br> <br>  After a number is displayed, you have 4 seconds to give an answer.
 		<br><br> <b> Deutsch </b> <br> <br>
-		Diese Übung dient dem Einstieg. Drücken Sie "m', wenn die Zahl die gleiche ist wie 3 Schritte zuvor; und "d", falls es sich um eine andere Zahl handelt. In dieser Beispielreihe müssten Sie bei den <b>fettgedruckten</b> Zahlen "m" und bei allen anderen "d" drücken:  <br><br> <i style="margin-left:40%"> 2, 1, 3, <b> 2 </b>, 7, <b> 3 </b>, 4, 6, 9, <b> 4 </b> </i> <br><br> Nachdem eine Zahl erscheint, bleiben Ihnen 4 Sekunden um sich für eine Antwort zu entscheiden. `,
+		Diese Übung dient dem Einstieg. Drücken Sie "m', wenn die Zahl die gleiche ist wie 3 Schritte zuvor; und "d", falls es sich um eine andere Zahl handelt. In dieser Beispielreihe müssten Sie bei den <b>fettgedruckten</b> Zahlen "m" und bei allen anderen "d" drücken:  <br><br> <i style="margin-left:40%"> 2, 1, 3, <b> 2</b>, 7, <b> 3</b>, 4, 6, 9, <b> 4</b> </i> <br><br> Nachdem eine Zahl erscheint, bleiben Ihnen 4 Sekunden um sich für eine Antwort zu entscheiden. `,
 		buttonText: `Start 3back practice / Beginne 3back Übung`
 	});
 	
@@ -89,10 +89,10 @@ const pre_practice4 = babeViews.view_generator(
 		trials: 1,
 		name: 'instructions',
 		title: 'Instructions - 4back ',
-		text:  `This time, press "m" if the number is the same as 4 numbers back and "d" if it is not. <br> Example: <br> <i style="margin-left:40%"> 3, 9, 1, 2, <b> 3 </b>, 4 <b> 1 </b>, 7, 5, <b> 4 </b> </i>
+		text:  `This time, press "m" if the number is the same as 4 numbers back and "d" if it is not. <br> Example: <br> <i style="margin-left:40%"> 3, 9, 1, 2, <b> 3</b>, 4, <b> 1</b>, 7, 5, <b> 4 </b> </i>
 		<br><br> <b> Deutsch </b> <br> <br>
 		Drücken Sie diesmal einfach "m", wenn die gezeigte Zahl 4 Schritte zuvor auch gezeigt wurde; und "d", wenn nicht. <br> Beispiel: <br><br>
-		<i style="margin-left:40%"> 3, 9, 1, 2, <b> 3 </b>, 4 <b> 1 </b>, 7, 5, <b> 4 </b> </i> `,
+		<i style="margin-left:40%"> 3, 9, 1, 2, <b> 3</b>, 4, <b> 1</b>, 7, 5, <b> 4 </b> </i> `,
 		buttonText: 'Start 4back practice / Beginne 4back Übung'
 	});
 	
