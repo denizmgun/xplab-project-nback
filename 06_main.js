@@ -26,11 +26,11 @@ $("document").ready(function() {
         views_seq: [
             intro,
             instructions,
-			pre_practice1,
+			/*pre_practice1,
 			nback_practice1,
 			pre_practice2,
 			nback_practice2,
-			pre_practice3,
+			*/pre_practice3,
 			nback_practice3,
 			pre_practice4,
 			nback_practice4,

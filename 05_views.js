@@ -27,8 +27,8 @@ const intro = babeViews.view_generator(
     trials: 1,
     name: 'intro',
 		// If you use JavaScripts Template String `I am a Template String`, you can use HTML <></> and javascript ${} inside
-		text:   `Hello,  on this site you are going to participate in a scientific experiment. The experiment will take approximately 8 to 12 minutes. It can be quite challenging and therefore requires you to be focused. If you have trained extensively on the nback task before, you are asked not to participate. Instructions are on the next page. <br><br> <b> Deutsch </b> <br> <br>
-		Hallo, auf dieser Seite nehmen Sie an einem wissenschaftlichen Experiment teil. Dies wird ungefähr 8 bis 12 Minuten in Anspruch nehmen. Das Experiment könnte einigen relativ schwer fallen. Deshalb erfordert es Ihre konzentration. Falls Sie eine Art nback-Training absolviert haben, sollten Sie nicht an diesem Experiment teilnehmen. Falls Sie nicht wissen, was das ist, fahren Sie fort. Weitere Anweisungen sind auf der nächsten Seite`,
+		text:   `Hello,  on this site you are going to participate in a scientific experiment. The experiment will take approximately 8 to 10 minutes. It can be quite challenging and therefore requires you to be focused. If you have trained extensively on the nback task before, you are asked not to participate. Instructions are on the next page. <br><br> <b> Deutsch </b> <br> <br>
+		Hallo, auf dieser Seite nehmen Sie an einem wissenschaftlichen Experiment teil. Dies wird ungefähr 8 bis 10 Minuten in Anspruch nehmen. Das Experiment könnte einigen relativ schwer fallen. Deshalb erfordert es Ihre Konzentration. Falls Sie eine Art nback-Training absolviert haben, sollten Sie nicht an diesem Experiment teilnehmen. Falls Sie nicht wissen, was das ist, fahren Sie fort. Weitere Anweisungen sind auf der nächsten Seite.`,
 		buttonText: 'See instructions / Zeige Anweisungen '
 	});
 
@@ -38,9 +38,9 @@ const instructions = babeViews.view_generator(
 		trials: 1,
 		name: 'instructions',
 		title: 'General Instructions',
-		text:  `First, you will go through 4 short practice blocks. These are followed by two larger test blocks. Your results from the last two blocks will be submitted. In each session you will see a sequence of numbers between 1 and 9. At any moment, there will be only one number on screen. Before each session you will receive specific instructions. 
+		text:  `First, you will go through 2 short practice blocks. These are followed by 2 larger test blocks. Your results from the test blocks will be submitted. In each session you will see a sequence of numbers between 1 and 9. At any moment, there will be only one number visible on the screen. Prior to each session you will receive specific instructions. 
 		<br> <br> <b> Deutsch </b> <br> <br>
-		Es folgen 4 kurze Übungsblöcke. Danach folgen 2 Testblöcke, deren Ergebnisse für das Experiment gewertet werden. In jedem Durchlauf sehen Sie nach und nach einzelne Zahlen zwischen 1 und 9. Was genau Sie tun müssen, erfahren Sie vor jedem Durchlauf.
+		Das Experiment beginnt mit 2 kurzen Übungsblöcken. Danach folgen 2 Testblöcke. Die Ergebnisse der Testblöcke werden für das Experiment gewertet. Während jeden Durchlaufs sehen Sie nach und nach einzelne Zahlen zwischen 1 und 9. Was genau Sie tun müssen, erfahren Sie vor jedem Durchlauf.
 		`,
 		buttonText: 'go to practice / zur Übung'
 	});
@@ -77,13 +77,38 @@ const pre_practice3 = babeViews.view_generator(
 		trials: 1,
 		name: 'instructions',
 		title: 'Instructions - 3back ',
+		text:  `This practice session serves as an introduction. In the following sample sequence you would have to press "m" if a number is the same as 3 steps back (indicated in <b>bold</b> font here) and "d" if it is not: <br> <br> <i style="margin-left:40%;"> 2, 1, 3, <b> 2 </b>, 7, <b> 3 </b>, 4, 6, 9, <b> 4 </b> </i> <br> <br>  After a number is displayed, you have 4 seconds to give an answer.
+		<br><br> <b> Deutsch </b> <br> <br>
+		Diese Übung dient dem Einstieg. Drücken Sie "m', wenn die Zahl die gleiche ist wie 3 Schritte zuvor; und "d", falls es sich um eine andere Zahl handelt. In dieser Beispielreihe müssten Sie bei den <b>fettgedruckten</b> Zahlen "m" und bei allen anderen "d" drücken:  <br><br> <i style="margin-left:40%"> 2, 1, 3, <b> 2 </b>, 7, <b> 3 </b>, 4, 6, 9, <b> 4 </b> </i> <br><br> Nachdem eine Zahl erscheint, bleiben Ihnen 4 Sekunden um sich für eine Antwort zu entscheiden. `,
+		buttonText: `Start 3back practice / Beginne 3back Übung`
+	});
+	
+const pre_practice4 = babeViews.view_generator(
+	"instructions",
+	{
+		trials: 1,
+		name: 'instructions',
+		title: 'Instructions - 4back ',
+		text:  `This time, press "m" if the number is the same as 4 numbers back and "d" if it is not. <br> Example: <br> <i style="margin-left:40%"> 3, 9, 1, 2, <b> 3 </b>, 4 <b> 1 </b>, 7, 5, <b> 4 </b> </i>
+		<br><br> <b> Deutsch </b> <br> <br>
+		Drücken Sie diesmal einfach "m", wenn die gezeigte Zahl 4 Schritte zuvor auch gezeigt wurde; und "d", wenn nicht. <br> Beispiel: <br><br>
+		<i style="margin-left:40%"> 3, 9, 1, 2, <b> 3 </b>, 4 <b> 1 </b>, 7, 5, <b> 4 </b> </i> `,
+		buttonText: 'Start 4back practice / Beginne 4back Übung'
+	});
+	
+const pre_practice3_old = babeViews.view_generator(
+	"instructions",
+	{
+		trials: 1,
+		name: 'instructions',
+		title: 'Instructions - 3back ',
 		text:  `Your task is the same as previously. But this time the target number is 3 steps back.
 		<br><br> <b> Deutsch </b> <br> <br>
 		Ihre Aufgabe ist die gleiche, wie in der vorherigen Übung. Doch diesmal liegt die Zahl 3 Schritte zurück.`,
 		buttonText: 'Start 3back practice / Beginne 3back Übung'
 	});
 
-const pre_practice4 = babeViews.view_generator(
+const pre_practice4_old = babeViews.view_generator(
 	"instructions",
 	{
 		trials: 1,
@@ -92,7 +117,7 @@ const pre_practice4 = babeViews.view_generator(
 		text:  `Almost done, indicate whether the number is equal to the one shown 4 steps earlier. 
 		<br><br> <b> Deutsch </b> <br> <br>
 		Beinahe fertig, geben Sie diesmal an, ob die gezeigte Zahl 4 Schritte zurückliegt.`,
-		buttonText: 'Start 4back practice'
+		buttonText: 'Start 4back practice / Beginne 4back Übung'
 	});
 
 	
@@ -115,7 +140,7 @@ const post_block1 = babeViews.view_generator(
 		name: 'instructions',
 		title: 'End - Block 1',
 		text:  'First Block finished. One more to go. Continue once you feel ready.',
-		buttonText: 'Start the second Block'
+		buttonText: 'Start the second Block / Beginne mit dem zweiten Block'
 	});
 
 
@@ -181,8 +206,8 @@ const pre_practice_3back = babeViews.view_generator(
 		title: 'Final Instructions - 3back ',
 		text:  `Indicate whether the number matches the one from 3 steps back. This is your last opportunity to practice.
 		<br><br>
-		Geben Sie an, ob die Zahl die selbe ist, wie 3 Schritte zuvor. Dies ist Ihre letze Übungsgelegenheit. ` ,
-		buttonText: 'Start final 3back practice / Beginne letze 3back Übung'
+		Geben Sie an, ob die Zahl dieselbe ist, wie 3 Schritte zuvor. Der nächste Durchlauf bietet die letzte Gelegenheit, um dies zu üben. ` ,
+		buttonText: 'Start final 3back practice / Beginne letzte 3back Übung'
 	});
 const pre_practice_4back = babeViews.view_generator(
 	"instructions",
@@ -190,10 +215,10 @@ const pre_practice_4back = babeViews.view_generator(
 		trials: 1,
 		name: 'instructions',
 		title: 'Final Instructions - 4back ',
-		text:  `Indicate wether the numer matches the one from 4 steps back. The next session will be your last opportunity to practice.
+		text:  `Indicate wether the number matches the one from 4 steps back. The next session will be your last opportunity to practice.
 		<br><br>
-		Geben Sie an, ob die Zahl dieselbe ist, wie 4 Schritte zuvor. Es folgt die letze Gelegenheit, um dies zu üben. `,
-		buttonText: 'Start final 4back practice'
+		Geben Sie an, ob die Zahl dieselbe ist, wie 4 Schritte zuvor. Der nächste Durchlauf bietet die letzte Gelegenheit, um dies zu üben. `,
+		buttonText: 'Start final 4back practice / Beginne letzt 4back Übung'
 	});
 	
 const post_practice_3back = babeViews.view_generator(
@@ -201,10 +226,10 @@ const post_practice_3back = babeViews.view_generator(
 	{
 		trials: 1,
 		name: 'post_practice_n3',
-		title: '',
-		text:  `You'll see 103 numbers. The first 3 answers wont count. Place your index fingers (or thumbs for handheld devices) above "d" and "m" respectively after pressing the button. Continue when you are ready.
+		title: '3back Block',
+		text:  `Like you have practiced just now, you need to indicate wether the number is the same one as 3 steps back. You'll see 103 numbers. The first 3 answers wont count. Place your index fingers (or thumbs for handheld devices) above "d" and "m" respectively after pressing the button. Continue when you are ready.
 		<br><br>
-		Es folgen 103 Zahlen. Die ersten 3 Antworten zählen nicht. Positionieren Sie Ihre Zeigefinger (oder Daumen für Smartphones o.ä.) jeweils über "d" und "m" nachdem Sie auf den Knopf geklickt haben. Fahren Sie fort, wenn Sie sich bereit fühlen.  `,
+		Genau wie gerade geübt, müssen Sie nun angeben, ob die Zahl dieselbe ist, wie 3 Schritte zuvor. Es folgen 103 Zahlen. Die ersten 3 Antworten zählen nicht. Positionieren Sie Ihre Zeigefinger (oder Daumen für Smartphones o.ä.) jeweils über "d" und "m" nachdem Sie auf den Knopf geklickt haben. Fahren Sie fort, wenn Sie sich bereit fühlen.  `,
 		buttonText: 'Start 3back block / Beginne 3back block'
 	});
 
@@ -213,10 +238,10 @@ const post_practice_4back = babeViews.view_generator(
 	{
 		trials: 1,
 		name: 'post_practice_n4',
-		title: '',
-		text:  `You'll see 104 numbers. The first 4 answers wont count. Place your index fingers (or thumbs for handheld devices) above "d" and "m" respectively after pressing the button. Continue when you are ready.
+		title: '4back Block',
+		text:  `Like you have practiced just now, you need to indicate wether the number is the same one as 4 steps back. You'll see 104 numbers. The first 4 answers wont count. Place your index fingers (or thumbs for handheld devices) above "d" and "m" respectively after pressing the button. Continue when you are ready.
 		<br><br>
-		Es folgen 104 Zahlen. Die ersten 4 Antworten zählen nicht. Positionieren Sie Ihre Zeigefinger (oder Daumen für Smartphones o.ä.) über "d" und "m" nachdem Sie auf den Knopf geklickt haben. Fahren Sie fort, wenn Sie sich bereit fühlen.  `,
+		Genau wie gerade geübt, müssen Sie nun angeben, ob die Zahl dieselbe ist, wie 4 Schritte zuvor. Es folgen 104 Zahlen. Die ersten 4 Antworten zählen nicht. Positionieren Sie Ihre Zeigefinger (oder Daumen für Smartphones o.ä.) über "d" und "m" nachdem Sie auf den Knopf geklickt haben. Fahren Sie fort, wenn Sie sich bereit fühlen.  `,
 		buttonText: 'Start 4back block / Beginne 4back Block'
 	});	
 
@@ -331,7 +356,6 @@ const block_4back_control = {
 	trials:	control_trials_4back
 	
 }
-
 
 // Ending Views
 const post_test = babeViews.view_generator(
