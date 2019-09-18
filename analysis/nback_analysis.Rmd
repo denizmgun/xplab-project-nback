@@ -8,37 +8,21 @@ output: html_document
 # Required R packages
 * `tidyverse` (or `ggplot2`, `dplyr`, `purrr`, `tibble`)
 * `brms`
-* `faintr`
-* `EnvStats`
-
-
 
 ### Importing Libraries
 
 ```{r setup, include=FALSE, echo = FALSE, message = FALSE}
-"knitr::opts_chunk$set(echo=TRUE, 
-                      warning=FALSE,
-                      message=FALSE, 
-                      collapse = TRUE,
-                      cache = TRUE,
-                      dev.args = list(bg = 'transparent'), 
-                      fig.align='center', 
-                      fig.height = 3, 
-                      fig.widht=4)"
-require(rmdformats)
-require(tidyverse)
-require(brms)
-require(faintr)
-require(parallel)
-require(EnvStats)
-options(mc.cores = parallel::detectCores()-1)
-
-#theme_set(theme_bw() + theme(plot.background=element_blank()) )
+library(tidyverse)
+library(rstan)
+library(brms)
+library(lme4)
+options(mc.cores = max(parallel::detectCores()-1, 1)) # at least one core if the machine only has one
+rstan_options(auto_write = TRUE)
 ```
 
 ### Setting seed for pseudo random operations
-```{r seed}
-set.seed(123) # this ensures that any psuedo-random computations are always the same
+```{r setting seed}
+set.seed(100) # this ensures that any psuedo-random computations are always the same
 ```
 
 
@@ -50,15 +34,13 @@ This file is a documentation of the statistical procedures that were used to ana
 ### Background: nback task
 In the nback task participants are shown a sequence of stimuli. For every stimulus the participants have to indicate wether the same stimulus has been presented exactly n steps earlier. There are different variants that may require participants to pay attention to more than one modality at the same time (e.g. shape and color or number and sound). But for this experiment a simple variant was chosen.
 
-The participants absolved 3- and 4back tasks with 100 trials for each, where the stimuli were integers between 1 and 9. They had 4 seconds to respond for each stimulus
+The participants absolved 3- and 4back tasks with 100 trials for each, where the stimuli were integers between 1 and 9. They had 4 seconds to respond for each stimulus. 
+
+There were two groups that differed in their porbability for lure foils. In the control group the lure foils were just as likely as any other number (1/9) while in the main groups the lure foils were assigned with a probability of 1/4 each. The control group is supposed to demonstrate that the lower accuracy for lure foils is not a result of some unknown effect that simply arises from having more lure foils.
 
 
 ### Purpose
 This experiment is supposed to demonstrate that the accuracy is significantly worse for lure foils than for non-targets and thus that the overall accuracy may depend on the amount of lure foils and targets present in the data. Therefore, when deploying the nback task, the frequency of lure foils is a parameter that needs to be controlled in order to make sure that interpersonal differences are truly a result of ability and not the frequency of lure foils. 
-___
-
-
-
 
 
 
@@ -71,7 +53,6 @@ head(data)
 ```
 
 # 2. Data Cleaning
-
 
 
 
@@ -88,6 +69,7 @@ data_pertinent = subset(data, trial_name != "practice" & trial_number > n)
 
 
 #### Removing irrelevant columns
+The only relevant columns for now are the stimulus type, the correctness, the reaction time, trial name, n-condition, the trial number and the submission id (subject)
 
 ```{r RelevantColumns}
 data = subset(data_pertinent, select= c(stim_type,correctness,RT,trial_name,n,trial_number,submission_id))
@@ -99,7 +81,7 @@ data = subset(data_pertinent, select= c(stim_type,correctness,RT,trial_name,n,tr
 
 
 #### Removing obviously Faulty Trials 
-###### Subjects with less than 200 trials overall:
+Subjects with less than 200 trials overall:
 ```{r Grouping}
 grouped = count(group_by(data, submission_id))
 ids_faulty = filter(grouped, n < 200)$submission_id
@@ -112,14 +94,41 @@ data = subset(data, !(submission_id %in% ids_faulty))
 
 #### Removing outliers with respect to Reaction Times (applying Rosner Test)
 Should there be outliers, all entries for a specific submission ID will be removed
-```{r Outlier Detection}
-mean_rts = aggregate(data$RT, list(data$submission_id, data$n), mean)
+```{r Outlier Detection Function}
 
+normalize = function(data) {
+  mu = mean(data)
+  sig = sd(data)
+  normalized = abs(data - mu)/sig
+  return(normalized)
+}
 
-outliers = rosnerTest(mean_rts$x, alpha=0.05)
+rosner_test = function(data, var.col, crit.value){
 
-outliers[12]
+  data$normalized = normalize(var.col)
+  maximum = c( max(data$normalized), min(data$normalized) ) %>% abs() %>% max()
+  
+  if(maximum >= crit.value){
+    data <- subset(data, abs(data$normalized) != maximum)
+    return(rosner_test(data, data$normalized, crit.value))
+    
+  } else {
+    return(data)
+  }
+}
+```
 
+Getting Means for reaction times
+```{r}
+mean_rts = aggregate(data$RT, FUN=mean, by=list(data$submission_id, data$n))
+names(mean_rts) <- c("submission_id", "n", "x")
+
+mean_rts.woo = rosner_test(data=mean_rts, var.col=mean_rts$x, crit.value=3)
+
+mean_rts.woo <- select(mean_rts.woo, c(1:(length(names(mean_rts.woo)))))
+mean_rts.woo
+
+mean_rts
 ```
 
 
@@ -151,7 +160,7 @@ cg2 = count(grouped2)
 # Getting list with unique values to iterate through in the following cells
 IDs = unique(grouped1$submission_id)
 stim_types = unique(grouped1$stim_type)
-gross_stimtypes=unique(grouped1$gross_stimtype)
+gross_stimtypes = unique(grouped1$gross_stimtype)
 trial_names = c("main", "control")
 N = c("3", "4")
 ```
@@ -161,11 +170,12 @@ N = c("3", "4")
 ##### Creating an accuracy table template
 
 ```{r Accuracy Table template}
-# Accuracy table must be atable with 6 rows: ID, trial_name, n, stimulus_type, gross_stimulus_type and accuracy
+# Accuracy table must be a table with the following rows: ID, trial_name, n, stimulus_type, gross_stimulus_type and accuracy
 accuracy_table <- data.frame(matrix(ncol = 6, nrow = 0))
 colnames(accuracy_table) <- c("ID","trial_name", "stimulus_type","gross_stimulus_type","n", "accuracy")
 
 # Defining the right variable types for cols.
+accuracy_table$submission_id <- as.factor(accuracy_table$submission_id)
 accuracy_table$accuracy <- as.numeric(accuracy_table$accuracy)
 accuracy_table$n <- as.factor(accuracy_table$n)
 
@@ -176,8 +186,10 @@ accuracy_table$n <- as.factor(accuracy_table$n)
 #### Filling Accuracy Tables
 
 ###### Fill accu_id
+This table is later used to show participants who wish to know theirresults how they scored in comparison to other participants. 
 
-```{r Fill Accu ID}
+
+```{r Fill Calculating accuracies by test subjects}
 
 accu_id = subset(accuracy_table, select=c(ID,trial_name,n,accuracy)) # seperate n's
 
@@ -187,7 +199,6 @@ for(id in IDs){
     trial_name = filter(data,submission_id==id)$trial_name[1]
     n_correct = filter(cg2, (submission_id == id) && (n == howmanyback & correctness == "correct"))$nn
     n_correct = sum(n_correct)
-    #print(n_correct)
     n_total = 100
     accuracy = n_correct/n_total
 
@@ -203,79 +214,7 @@ head(accu_id)
 
 
 
-
-###### Fill accuracy table for gross stimtypes
-
-```{r Fill Accu Gross Stimtype}
-
-accu_gross_stimtype = subset(accuracy_table, select=c(gross_stimulus_type,accuracy)) # can not seperate (howmany)n's(back) is independent from gross_stimtype
-
-
-for(gr in gross_stimtypes){
-  n_correct = sum(filter(cg2, gross_stimtype==gr && correctness=="correct")$nn)
-  n_total = sum(filter(cg2, gross_stimtype==gr)$nn)
-  accuracy = n_correct/n_total
-
-  entry = data.frame(gross_stimulus_type = gr, accuracy = accuracy)
-  accu_gross_stimtype <- rbind(accu_gross_stimtype, entry) 
-}
-
-head(accu_gross_stimtype)
-```
-
-
-
-
-
-
-###### Fill accuracy table for stimtypes
-
-```{r Fill Accu Stimtype}
-
-accu_stimtype = subset(accuracy_table, select=c(stimulus_type,accuracy)) # seperate n's
-
-for(st in stim_types){
-  n_correct = sum(filter(cg2, stim_type==st && correctness=="correct")$nn)
-  n_total = sum(filter(cg2, stim_type==st)$nn)
-  accuracy = n_correct/n_total
-  
-  entry = data.frame(stimulus_type = st, accuracy = accuracy)
-  accu_stimtype <- rbind(accu_stimtype, entry) 
-}
-
-head(accu_stimtype)
-```
-
-
-
-
-
-
-###### Filling a complete accuracy table
-
-```{r Fill Accu Stimtype seperated by n}
-accu_stimtype_by_n = subset(accuracy_table, select=c(stimulus_type,n,accuracy)) # can't seperate n's
-
-for(st in stim_types){
-  for(n in N){
-    howmanyback = n
-    n_correct = sum(filter(cg2, (stim_type == st && n==howmanyback) && correctness=="correct")$nn)
-    n_total = sum(filter(cg2,stim_type==st & n==howmanyback)$nn)
-    accuracy = n_correct/n_total
-    
-    entry = data.frame(stimulus_type=st,n=n, accuracy=accuracy)
-    accu_stimtype_by_n <- rbind(accu_stimtype_by_n, entry) 
-  }
-}
-
-head(accu_stimtype_by_n)
-```
-
-
-
-
-
-###### Fill a complete accuracy ordered on all relevant variables.
+###### Fill a complete accuracy table ordered on all relevant variables.
 
 ```{r Fill a complete accu table}
 accu_complete <- subset(accuracy_table, select=c(ID, trial_name, stimulus_type, gross_stimulus_type, n, accuracy))
@@ -288,7 +227,7 @@ for(id in IDs){
       trial_name = filter(data,submission_id==id)$trial_name[1]
       gr_st = filter(data, stim_type == st)$gross_stimtype[1]
       n_correct = sum( filter(cg2, (submission_id == id && stim_type == st) && (n == howmanyback && correctness == "correct"))$nn )
-      n_total = sum( filter(cg2, (submission_id == id && n == howmanyback)&&stim_type == st)$nn )
+      n_total = sum( filter(cg2, (submission_id == id && n == howmanyback) && stim_type == st)$nn )
       accuracy = n_correct/n_total
       
       entry = data.frame(submission_id = id, trial_name = trial_name, stimulus_type = st, gross_stimulus_type = gr_st, n = howmanyback, accuracy = accuracy, count = n_total)
@@ -296,12 +235,18 @@ for(id in IDs){
     }
   }
 }
-
 head(accu_complete)
 ```
 
 
+##### Variables
+Dependent: Accuracy
+Independent: trial_name, (gross_)stimulus_type, id, n, count
 
+```{r Setting Variable Types}
+accu_complete$submission_id <- as.factor(accu_complete$submission_id)
+accu_complete$n <- as.factor(accu_complete$n)
+```
 
 
 
@@ -311,7 +256,7 @@ head(accu_complete)
 #### The proposed hypotheses were
 
 
-H1 : The accuracy for lure foils (at n-1 as well as at n+1) is lower than the accuracy of non-targets. 
+H1: The accuracy for lure foils (at n-1 as well as at n+1) is lower than the accuracy of non-targets. 
 
 H2: The accuracy of targets is worse than the accuracy of non-targets
 
@@ -320,6 +265,7 @@ H2: The accuracy of targets is worse than the accuracy of non-targets
 
 ###### Getting an Overview
 
+First we get an overview to illustrate the data
 ```{r Boxplot Accuracy}
 ggplot(accu_complete,mapping=aes(x=stimulus_type, y=accuracy, color=n))+
   geom_boxplot()
@@ -328,66 +274,58 @@ ggplot(accu_complete,mapping=aes(x=stimulus_type, y=accuracy, color=n))+
 
 
 
+### Removing Outliers with respect to accuracy and plotting again to quickly see wether outliers had an obvious impact.
 
-
-##### Variables
-Dependent: Accuracy
-Independent: trial_name, (gross_)stimulus_type, id, n, gros
-
-```{r Setting Variable Types}
-accu_complete$submission_id <- as.factor(accu_complete$submission_id)
-accu_complete$n <- as.factor(accu_complete$n)
-head(accu_complete)
+```{r Removing Outliers and plotting again}
+accu_complete <- rosner_test(accu_complete, var.col=accu_complete$accuracy, crit.value=3)
+ggplot(data=accu_complete, mapping=aes(x=stimulus_type, y=accuracy, color=n))+
+  geom_boxplot()
 ```
+
 
 ### Model
-
-Creating clusters for parallel computing first
-```{r Creating Cluster}
-numCores = max(1, detectCores()-1)
-cl = makeCluster(numCores)
-clusterSetRNGStream(cl, 123)
+```{r Listing the Variables}
+names(accu_complete)
 ```
 
-```{r Regression Formulas}
-formula_acc_st = accuracy ~ stimulus_type
-formula_acc_gst = accuracy ~ gross_stimulus_type
-clusterExport(cl, varlist=c("accu_complete", "formula_acc_st", "formula_acc_gst"))
-```
+We'll make accuracy in our formula dependend on the fixed effects stimulus_type and n and include the random intercepts for subjects (="submission_id") and groups (="trial_name")
 
-
-```{r}
-
+```{r Regression Formula}
+formula = accuracy ~ stimulus_type+n + (1|submission_id) + (1|trial_name)
 ```
 
 
 
 
 
-Importing libraries into cluster
-```{r Importing Libraries into cluster}
-clusterEvalQ(cl, {
-  require(brms)
-  require(tidyverse)
-  }
-)
+Now we create a bayesian regression model 
+```{r Creating brms model }
+
+accu_complete.mdl.brm = brm(formula, accu_complete)
+accu_complete.mdl.brm
 
 ```
 
 
+# Testing Hypotheses
+
+In order to test our hypotheses we look at the coefficients from our posterior samples, which we obtained from the model above. 
+
+If a coefficient, say e.g. "b_stimulus_typetarget" of one sample is smaller than 0, this indicates the following:
+Based on our estimates for the real parameters, there is a sample drawn from our posterior distribution for which it is true, that the mean accuracy for the stimulus type "target" is lower than the mean accuracy for the stimulus type "non-target" which is our intercept. 
+
+What we are going to do in order to assess the probabilities of our hypotheses, is, look at the ratio of samples for which a coefficient like e.g. "b_stimulus_typetarget" is smaller than 0.
 
 
+We predict that the accuracy is lower for all kinds of lures than it is for non-targets. We'll accept in a preliminary fashion that our hypotheses are true if the probability that one of the mentioned coefficients is lower than the intercept is at least 95%. 
 
-Running the model within the cluster
-```{r Creating brms model within cluster}
-clusterEvalQ(cl, {
-  model_stim_type = brm(formula_acc_st, accu_complete)
-  #model_g_stim_type = brm(formula_acc_gst, accu_complete)
-  model_stim_type
-  }
-)
+```{r Calculating probabilities of Hypotheses}
+post.samples = posterior_samples(accu_complete.mdl.brm)
+probabilities = lapply(post.samples[, 1:8], FUN=function(x){return(mean(x<0))})
+
+print(probabilities)
 ```
 
-
+For our fake data we can actually see very high probabilites for our proposed hypotheses. Now the question remains wether our real data will yield the same results. 
 
 
