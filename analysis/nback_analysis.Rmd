@@ -269,26 +269,25 @@ We predict that the accuracy is lower for all kinds of lures than it is for non-
 ```{r}
 accu_complete.mdl.brm
 ```
-We can't always tell beforehand which value is chosen as intercept. Therefore this has to be done again after all the data has been collected. But in this case "target" seems to be our intercept.
 
-
+We can't always tell beforehand which value is chosen as intercept. Therefore this has to be done again after all the data has been collected. But in this case "non-target" seems to be our intercept.
 $H1:$ _Lure foils are less probable than non-targets._
 ```{r Calculating probabilities of Hypotheses}
 post.samples = posterior_samples(accu_complete.mdl.brm)
 #For n3
-p.H1a = mean(post.samples$b_stimulus_typelureMnM1 < post.samples$b_stimulus_typenonMtarget)
-p.H1b = mean(post.samples$b_stimulus_typelureMnP1 < post.samples$b_stimulus_typenonMtarget)
+p.H1a = mean(post.samples$b_stimulus_typelureMnM1 < post.samples$b_Intercept)
+p.H1b = mean(post.samples$b_stimulus_typelureMnP1 < post.samples$b_Intercept)
 
 p.hypotheses = data.frame(H1a = p.H1a, H1b = p.H1b)
 
 #For the interaction with n4
 p.H1a.n4 = mean(post.samples$b_stimulus_typelureMnM1 +
                post.samples$"b_stimulus_typelureMnM1:n4" +
-               post.samples$"b_n4" < post.samples$b_stimulus_typenonMtarget)
+               post.samples$"b_n4" < post.samples$b_Intercept)
 
 p.H1b.n4 = mean(post.samples$b_stimulus_typelureMnP1 +
                post.samples$"b_stimulus_typelureMnP1:n4" +
-               post.samples$"b_n4" < post.samples$b_stimulus_typenonMtarget)
+               post.samples$"b_n4" < post.samples$b_Intercept)
 
 p.hypotheses = rbind(p.hypotheses, data.frame(H1a = p.H1a.n4, H1b = p.H1b.n4))
 p.hypotheses$n <- as.factor(c(3,4))
@@ -301,17 +300,18 @@ For our fake data none of the samples yielded a mean for the coefficients of int
 
 $H1c :$  _Lure foils at n+1 are significantly more accurately classified than lures at n-1._
 
-Now, we can't show that the accuracies for lures at n-1 and n+1 are 'significantly similar'. What we can try to show, at least, is that one is not significantly higher than the other. It is to be kept in mind, however, that this is not an appropriate procedure to conduct hypotheses testing but merely provides an intimation of the relationship between the two kinds of lures. The results will be stored in the column "H1c" below.
+We use a Kolgomorov-Smirnov Test. We assess the sameness of the parameters "stimulus_typelure-n+1" and "stimulus_type_lure-n-1". The p-values are based on a statistic that measures the maximum Distance between the empirical cumulative distribution functions of both parameters. High p-values indicate the probability to see a bigger difference if those two samples are from the same distribution. A very low p-value indicates that there is not a good statistical support for the difference between the two parameters.
 
 ```{r}
 
 # Testing wether lures at n+1 are significantly more accurate than lures at n-1
-p.H1c = mean(post.samples$b_stimulus_typelureMnP1 > post.samples$b_stimulus_typelureMnM1)
+#[2] Is the p.value of the summary that is returned by ks()
+p.H1c = ks.test(post.samples$b_stimulus_typelureMnP1, post.samples$b_stimulus_typelureMnM1)[2]
 #Considering the interaction with and the intercept for n=4
-p.H1c.n4 = mean(post.samples$b_stimulus_typelureMnP1 +
+p.H1c.n4 = ks.test(post.samples$b_stimulus_typelureMnP1 +
                   post.samples$"b_stimulus_typelureMnP1:n4"
-                > post.samples$b_stimulus_typelureMnM1 +
-                  post.samples$"b_stimulus_typelureMnM1:n4")
+                , post.samples$b_stimulus_typelureMnM1 +
+                  post.samples$"b_stimulus_typelureMnM1:n4")[2]
 
 p.hypotheses <- add_column(p.hypotheses, c(p.H1c, p.H1c.n4), .before="n")
 colnames(p.hypotheses)[3] <- "H1c"
@@ -461,15 +461,15 @@ p.H1b.n4 = mean(post.samples$b_stimulus_typelureMnP1 +
 p.hypotheses = rbind(p.hypotheses, data.frame(H1a = p.H1a.n4, H1b = p.H1b.n4))
 p.hypotheses$n <- as.factor(c(3,4))
 print(p.hypotheses)
-p.H1c = mean(post.samples$b_stimulus_typelureMnP1 > post.samples$b_stimulus_typelureMnM1)
+p.H1c = ks.test(post.samples$b_stimulus_typelureMnP1, post.samples$b_stimulus_typelureMnM1)[2]
 #Considering the interaction with and the intercept for n=4
-p.H1c.n4 = mean(post.samples$b_stimulus_typelureMnP1 +
+p.H1c.n4 = ks.test(post.samples$b_stimulus_typelureMnP1 +
                   post.samples$"b_stimulus_typelureMnP1:n4"
-                > post.samples$b_stimulus_typelureMnM1 +
-                  post.samples$"b_stimulus_typelureMnM1:n4")
-
+                , post.samples$b_stimulus_typelureMnM1 +
+                  post.samples$"b_stimulus_typelureMnM1:n4")[2]
 p.hypotheses <- add_column(p.hypotheses, c(p.H1c, p.H1c.n4), .before="n")
 colnames(p.hypotheses)[3] <- "H1c"
 print(p.hypotheses)
 ```
+
 
