@@ -1,0 +1,183 @@
+```{r include=FALSE}
+subject.id = 1
+group = "control"
+```
+
+
+---
+title: Nback and lure foils - Results of Subject 1
+date: 'Saturday,  September 20 20:00 CET'
+author: "Deniz Guen"
+output: html_document
+---
+
+```{r setup, include=FALSE, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(plotly)
+```
+
+```{r setting seed, include=FALSE}
+set.seed(100) # this ensures that any psuedo-random computations are always the same
+```
+
+```{r Import Data, message=TRUE, warning=TRUE, include=FALSE, tidy=FALSE}
+data.raw = data.frame(read.csv("fake_data.csv"))
+data_pertinent = subset(data.raw, trial_name != "practice" & trial_number > n)
+data = subset(data_pertinent, select= c(stim_type,correctness,RT,trial_name,n,trial_number,submission_id))
+
+# Add gross stimtype
+gross = data$stim_type
+gross = ifelse(data$stim_type == "target", "target", "non-target")
+data$gross_stimtype = gross
+```
+
+```{r count occurences for certain groupings, include=FALSE}
+#Grouping by ID stim type, trial name and n --- 'nn' is the total number of trials for the specific variable combination of each row
+grouped1 = data %>% group_by(submission_id,stim_type,gross_stimtype,trial_name,n)
+cg1 = count(grouped1)
+#Grouping by correctness for counts of "correct" or "incorrect" --- 'nn' is number of correct trials for the specific variable combination of each row
+grouped2 = grouped1 %>% group_by(correctness, add=TRUE)
+cg2 = count(grouped2)
+```
+
+```{r Accuracy Table template, include=FALSE}
+# Accuracy table must be a table with the following rows: ID, trial_name, n, stimulus_type, gross_stimulus_type and accuracy
+accuracy_table <- data.frame(matrix(ncol = 6, nrow = 0))
+colnames(accuracy_table) <- c("ID","trial_name", "stimulus_type","gross_stimulus_type","n", "accuracy")
+
+# Defining the right variable types for cols.
+accuracy_table$submission_id <- as.factor(accuracy_table$submission_id)
+accuracy_table$accuracy <- as.numeric(accuracy_table$accuracy)
+accuracy_table$n <- as.factor(accuracy_table$n)
+
+```
+
+
+```{r include=FALSE}
+#Getting lists with unique values to iterate through in the following cells
+IDs = unique(grouped1$submission_id) %>% as.factor()
+stim_types = unique(grouped1$stim_type)
+gross_stimtypes = unique(grouped1$gross_stimtype)
+trial_names = c("main", "control")
+N = c("3", "4")
+```
+
+
+```{r Calculating accuracies by test subjects, include=FALSE}
+accu_id = subset(accuracy_table, select=c(ID,trial_name,n,accuracy)) # seperate n's
+
+for(id in IDs){
+  for(n in N){
+    howmanyback = n
+    trial_name = filter(data,submission_id==id)$trial_name[1]
+    n_correct = filter(cg2, (submission_id == id) && (n == howmanyback & correctness == "correct"))$nn
+    n_correct = sum(n_correct)
+    n_total = 100
+    accuracy = n_correct/n_total
+
+
+    entry = data.frame(submission_id=id, trial_name=trial_name, n=n, accuracy=accuracy)
+    accu_id <- rbind(accu_id, entry)
+  }
+}
+
+'
+ids = accu_id$submission_id
+comments = lapply(ids, 
+                  FUN=function(x){subset(data.raw, submission_id==x)$comments[1] %>% as.character() %>%  return()})
+
+## Print accuracies and comments
+for(i in c(1:nrow(accu_id))){
+  output = sprintf("id: %d \n n: %s, \n accuracy: %f \n comment: %s \n trial: %s \n",
+                   accu_id$submission_id[i], accu_id$n[i], accu_id$accuracy[i], comments[i], accu_id$trial_name[i])
+  cat(output) 
+}
+
+accu_id$submission_id <- accu_id$submission_id %>% as.factor()
+'
+```
+
+
+The following interactive graph depicts the overall accuracies of each subject in your group. This translates to the proportion of correct answers in general. The position of your score is marked by a rectangular shape with a black outline. The different colors represent the 3back condition (orange) and the 4back condition (blue). The horizontal lines mark the average accuracy for each condition. Hover above a point of interest for more information.
+```{r Plotting the overall accuracies, include=FALSE}
+
+subject.plot.data = subset(accu_id, trial_name==group)
+
+pl = ggplot(data=subject.plot.data, mapping=aes(x=submission_id, y=accuracy, color=n))+xlab("Subject")+ggtitle(sprintf("Performance of Subject %s in group '%s' ", subject.id, group))+
+  geom_point() +
+  geom_hline(yintercept=mean(subset(subject.plot.data, n==3)$accuracy), color="#F8766D", size=1.2)+
+  geom_hline(yintercept=mean(subset(subject.plot.data, n==4)$accuracy), color="#00BFC4", size=1.2)+
+  
+  geom_point(data=subset(accu_id, submission_id==subject.id), shape=18, size = 3, color="black")+
+  geom_point(data=subset(accu_id, submission_id==subject.id), shape=18, size = 2) +
+ theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+```
+
+
+```{r echo=FALSE}
+(ggpl <- ggplotly(pl))
+```
+
+Irrespective of wether you are content or slightly disappointed with your results, you should not assign too much importance to your placement on the above graph. That is not necessarily because I would like to cheer you up or put you in your place. Indeed, some parameters in this experiment could have made the test harder for you than it was even for other members of your group. 
+
+Different kinds of numbers -or 'stimuli' to use the correct term- may be harder to classify correctly than others depending on their positions in the sequence. Two different kinds of stimuli are 'targets' and 'non-targets'. To clarify the meaning behind these it might be useful to look at some examples.
+
+The position of where a 'target' stimulus for the number $2$ should be located, is marked with a $T$ in subscript. In the following sequences the second $2$ is a target.
+(condition: 3back)
+$$ [ 2_0,3,4,2_T,6 ]$$
+$$ [7,2_0,1,6,2_T,8] $$
+For the next sequences the second $2$ is a 'non-target'
+
+$$ [2_0,3,2,8_T,1] $$
+
+$$ [7,2_0,2,6,5_T,8] $$
+_Purpose of the Experiment_
+The short investigation I conducted shows that the accuracy for targets is significantly lower than for non-targets. So the number of targets in your run might have ruined your score. But it's even worse! The are other kinds of stimuli, "lures" that also seem to be harder to classify correctly. Lures are numbers that bait you into falsely indicating that a number is a target. They occur one step ahead or before the target number. This is precisely why this had to be shown. Other researchers use this test for different kinds of experiments. And certainly not many of them consider that the frequency of lures actually influences the scores of participants and has to be controlled for. What the experiment you took part in could be described as is 'an attempt to raise awareness for the pitfalls and provide an alternative way to evaluate the results of the nback tasks in a more differentiated and informative manner'. And this would not have been possible without all the people that participated. 
+
+Since the proportions of these stimuli in your run influence your result to a degree that we can not understand from looking at the above graph, it is more reasonable to look at your performances for each kind of stimulus and compare it to the average. Different groups had different proportions of each stimulus type. The following interactive graph shows your performance in a context that is independent of the different proportions of stimuli. Your score's positions are marked by the orange and blue dots. If the graph appears too cluttered for you, click on the small white squares on the right to hide some boxes. 
+
+```{r Creating a complete and differentiated accuracy table., include=FALSE, echo=FALSE}
+accu_complete <- subset(accuracy_table, select=c(ID, trial_name, stimulus_type, gross_stimulus_type, n, accuracy))
+
+for(id in IDs){
+  for(n in N){
+    for(st in stim_types){
+    
+      howmanyback = n
+      trial_name = filter(data,submission_id==id)$trial_name[1]
+      gr_st = filter(data, stim_type == st)$gross_stimtype[1]
+      n_correct = sum( filter(cg2, (submission_id == id && stim_type == st) && (n == howmanyback && correctness == "correct"))$nn )
+      n_total = sum( filter(cg2, (submission_id == id && n == howmanyback) && stim_type == st)$nn )
+      accuracy = n_correct/n_total
+      
+      entry = data.frame(submission_id = id, trial_name = trial_name, stimulus_type = st, gross_stimulus_type = gr_st, n = howmanyback, accuracy = accuracy, count = n_total)
+      accu_complete <- rbind(accu_complete, entry)
+    }
+  }
+}
+```
+
+
+
+
+```{r Boxplot Accuracy, echo=FALSE}
+#Creating dataframe for individual participants.
+subject = subset(accu_complete, submission_id == subject.id)
+pl.full = ggplot(accu_complete,mapping=aes(x=stimulus_type, y=accuracy, color=n))+ggtitle(sprintf("Accuracies by Stimulus Type and performance of subject %s", subject.id))+
+  geom_boxplot() +
+  geom_point(data=subject, size=3)
+
+ggplotly(pl.full)
+```
+
+
+This experiment was part of my assignment for the "Experimental Psychology Lab" course that attended recently. Should you be for some reason interested in my full report or would like to give me some feedback, please contact me at dguen@uos.de
+
+If you want to modify and or use the experiment yourself, checkout the repository at
+
+https://github.com/denizmguen/xplab-project-nback
+
+## Thank you very much for your contribution! 
+
+

@@ -36,37 +36,28 @@ In the nback task participants are shown a sequence of stimuli. For every stimul
 
 The participants absolved 3- and 4back tasks with 100 trials for each, where the stimuli were integers between 1 and 9. They had 4 seconds to respond for each stimulus. 
 
-There were two groups that differed in their porbability for lure foils. In the control group the lure foils were just as likely as any other number (1/9) while in the main groups the lure foils were assigned with a probability of 1/4 each. The control group is supposed to demonstrate that the lower accuracy for lure foils is not a result of some unknown effect that simply arises from having more lure foils.
+There were two groups that differed in the ratio of lure foils to other stimuli. In the control group the lure foils were just as likely as any other number (1/9) while in the main groups the lure foils were assigned with a probability of 1/4 each. The control group is supposed to demonstrate that the lower accuracy for lure foils is not a result of some unknown effect that simply arises from having more lure foils.
 
 
 ### Purpose
-This experiment is supposed to demonstrate that the accuracy is significantly worse for lure foils than for non-targets and thus that the overall accuracy may depend on the amount of lure foils and targets present in the data. Therefore, when deploying the nback task, the frequency of lure foils is a parameter that needs to be controlled in order to make sure that interpersonal differences are truly a result of ability and not the frequency of lure foils. 
-
-
+The n-back task is sometimes used in comparative studies to assess, e.g. wether a training programm had an effect on performances in working memory related tasks like the nback task. The performances of participants, however, may depend on the proportion of lure foils in the sequence of stimuli. So, this experiment is supposed to demonstrate that different kinds of stimuli which are usually not explicitly marked by experimentors significantly influence the results. Therefore in future experiments other researchers need to compare the performances on specific stimulus types to rule out their influence on their results.   
 
 # 1. Overview
 
 #### Importing data
 ```{r Import Data,message=TRUE, warning=TRUE, tidy=FALSE}
-data = data.frame(read.csv("fake_data.csv"))
-head(data)
+data.raw = data.frame(read.csv("fake_data.csv"))
+head(data.raw)
 ```
 
 # 2. Data Cleaning
-
-
 
 #### Removing non-pertinent data (practice sessions)
 This includes every trial number smaller than n. Taking the 4back task for example, a target can not appear before the 4th trial.
 
 ```{r DataClean1}
-data_pertinent = subset(data, trial_name != "practice" & trial_number > n)
+data_pertinent = subset(data.raw, trial_name != "practice" & trial_number > n)
 ```
-
-
-
-
-
 
 #### Removing irrelevant columns
 The only relevant columns for now are the stimulus type, the correctness, the reaction time, trial name, n-condition, the trial number and the submission id (subject)
@@ -75,11 +66,6 @@ The only relevant columns for now are the stimulus type, the correctness, the re
 data = subset(data_pertinent, select= c(stim_type,correctness,RT,trial_name,n,trial_number,submission_id))
 ```
 
-
-
-
-
-
 #### Removing obviously Faulty Trials 
 Subjects with less than 200 trials overall:
 ```{r Grouping}
@@ -87,10 +73,6 @@ grouped = count(group_by(data, submission_id))
 ids_faulty = filter(grouped, n < 200)$submission_id
 data = subset(data, !(submission_id %in% ids_faulty))
 ```
-
-
-
-
 
 #### Removing outliers with respect to Reaction Times (applying Rosner Test)
 Should there be outliers, all entries for a specific submission ID will be removed
@@ -103,7 +85,7 @@ normalize = function(data) {
   return(normalized)
 }
 
-rosner_test = function(data, var.col, crit.value){
+rosner_outlier_removal = function(data, var.col, crit.value){
 
   data$normalized = normalize(var.col)
   maximum = c( max(data$normalized), min(data$normalized) ) %>% abs() %>% max()
@@ -116,39 +98,54 @@ rosner_test = function(data, var.col, crit.value){
     return(data)
   }
 }
+
+get_outliers = function(data, var.col,grouping.variables, crit.value){
+  #woo : "without outliers"
+  data.woo = rosner_outlier_removal(data=data, var.col=var.col, crit.value=crit.value)
+  data.woo = select(data.woo, c(1:(length(names(data.woo)))))
+  
+  all = select(data, grouping.variables)
+  non_outliers = select(data.woo, grouping.variables)
+  outliers = anti_join(all,non_outliers)
+  return(outliers)
+}
+
+
 ```
 
-Getting Means for reaction times
-```{r}
+We find the outliers based on unlikely reaction times using the rosner test for outlier detection ( and removal).
+```{r Finding Outliers, eval=FALSE, include=FALSE}
 mean_rts = aggregate(data$RT, FUN=mean, by=list(data$submission_id, data$n))
-names(mean_rts) <- c("submission_id", "n", "x")
+names(mean_rts) = c("submission_id", "n", "x")
 
-mean_rts.woo = rosner_test(data=mean_rts, var.col=mean_rts$x, crit.value=3)
-
-mean_rts.woo <- select(mean_rts.woo, c(1:(length(names(mean_rts.woo)))))
-mean_rts.woo
-
-mean_rts
+outliers = get_outliers(data=mean_rts, var.col=mean_rts$x, 
+                         grouping.variables=c("submission_id", "n"), crit.value=3)
+outliers
 ```
 
-
+Now we remove the outliers from our dataset.
+```{r Removing outliers from data, eval=FALSE, include=FALSE}
+if(nrow(outliers)>0){
+  for(row in c(1:nrow(outliers))){
+    sprintf("ID: %d, n: %d",outliers$submission_id[row], outliers$n[row] )
+    data <- subset(data, submission_id != outliers$submission_id[row] , n != outliers$n[row])
+  }
+}
+```
 
 
 #### Adding column stim_type_gross
-
+Could be interesting for plotting.
 ```{r Add gross stimtype}
 gross = data$stim_type
-gross = ifelse(data$stim_type %in% c("non-target", "target"), "non-lure", "lure")
+gross = ifelse(data$stim_type == "target", "target", "non-target")
 data$gross_stimtype = gross
 ```
 
 
-
-
-
 #### Creating a table with accuracy for different IDs and stimuli
 
-###### The grouping is important for counting the stimuli for a specific combination of values (e.g.: ID = 1, stim_type = "non-target", correctness = "correct", n=3, etc..)  such that the acuracy for a specific kind of stimulus can be calculated.
+The grouping is important for counting the stimuli for a specific combination of values (e.g.: ID = 1, stim_type = "non-target", correctness = "correct", n=3, etc..)  such that the acuracy for a specific kind of stimulus can be calculated.
 
 ```{r count group members}
 #Grouping by ID stim type, trial name and n --- 'nn' is the total number of trials for the specific variable combination of each row
@@ -165,8 +162,6 @@ trial_names = c("main", "control")
 N = c("3", "4")
 ```
 
-
-
 ##### Creating an accuracy table template
 
 ```{r Accuracy Table template}
@@ -180,39 +175,6 @@ accuracy_table$accuracy <- as.numeric(accuracy_table$accuracy)
 accuracy_table$n <- as.factor(accuracy_table$n)
 
 ```
-
-
-
-#### Filling Accuracy Tables
-
-###### Fill accu_id
-This table is later used to show participants who wish to know theirresults how they scored in comparison to other participants. 
-
-
-```{r Fill Calculating accuracies by test subjects}
-
-accu_id = subset(accuracy_table, select=c(ID,trial_name,n,accuracy)) # seperate n's
-
-for(id in IDs){
-  for(n in N){
-    howmanyback = n
-    trial_name = filter(data,submission_id==id)$trial_name[1]
-    n_correct = filter(cg2, (submission_id == id) && (n == howmanyback & correctness == "correct"))$nn
-    n_correct = sum(n_correct)
-    n_total = 100
-    accuracy = n_correct/n_total
-
-
-    entry = data.frame(submission_id=id, trial_name=trial_name, n=n, accuracy=accuracy)
-    accu_id <- rbind(accu_id, entry)
-  }
-}
-
-head(accu_id)
-```
-
-
-
 
 ###### Fill a complete accuracy table ordered on all relevant variables.
 
@@ -238,7 +200,6 @@ for(id in IDs){
 head(accu_complete)
 ```
 
-
 ##### Variables
 Dependent: Accuracy
 Independent: trial_name, (gross_)stimulus_type, id, n, count
@@ -249,39 +210,31 @@ accu_complete$n <- as.factor(accu_complete$n)
 ```
 
 
-
-
 # 3. Hypothesis Tests
 
 #### The proposed hypotheses were
 
+$H1_a$ and $H1_b$: The accuracy for lure foils at n-1 ($a$) as well as at n+1($b$)) is lower than the accuracy of non-targets. 
 
-H1: The accuracy for lure foils (at n-1 as well as at n+1) is lower than the accuracy of non-targets. 
-
-H2: The accuracy of targets is worse than the accuracy of non-targets
-
-
-
+$H0_c$: The accuracy of lure foils at n+1 does not differ significantly from lure foils at n-1.
 
 ###### Getting an Overview
 
 First we get an overview to illustrate the data
 ```{r Boxplot Accuracy}
-ggplot(accu_complete,mapping=aes(x=stimulus_type, y=accuracy, color=n))+
+ggplot(accu_complete,mapping=aes(x=gross_stimulus_type, y=accuracy, color=n))+
   geom_boxplot()
 ```
 
 
+Now we remove outliers with respect to accuracy and plot again.
 
-
-### Removing Outliers with respect to accuracy and plotting again to quickly see wether outliers had an obvious impact.
-
-```{r Removing Outliers and plotting again}
-accu_complete <- rosner_test(accu_complete, var.col=accu_complete$accuracy, crit.value=3)
-ggplot(data=accu_complete, mapping=aes(x=stimulus_type, y=accuracy, color=n))+
+```{r Removing Outliers and plotting again, eval=FALSE, include=FALSE}
+accu_complete <- rosner_outlier_removal(accu_complete, var.col=accu_complete$accuracy, crit.value=3)
+ggplot(data=accu_complete.woo, mapping=aes(x=stimulus_type, y=accuracy, color=n))+
   geom_boxplot()
-```
 
+```
 
 ### Model
 ```{r Listing the Variables}
@@ -291,25 +244,18 @@ names(accu_complete)
 We'll make accuracy in our formula dependend on the fixed effects stimulus_type and n and include the random intercepts for subjects (="submission_id") and groups (="trial_name")
 
 ```{r Regression Formula}
-formula = accuracy ~ stimulus_type+n + (1|submission_id) + (1|trial_name)
+formula = bf(accuracy ~ stimulus_type*n+(1|submission_id)+(1|trial_name),
+          sigma ~ stimulus_type*n+(1|submission_id) + (1|trial_name))
 ```
 
-
-
-
-
-Now we create a bayesian regression model 
+Now we create a bayesian regression model where we assume student's distribution (Kruschker's Model: Robust Bayesian Estimation)
 ```{r Creating brms model }
-
-accu_complete.mdl.brm = brm(formula, accu_complete)
-accu_complete.mdl.brm
-
+accu_complete.mdl.brm = brm(formula, data=accu_complete, family="student")
 ```
 
 
 # Testing Hypotheses
-
-In order to test our hypotheses we look at the coefficients from our posterior samples, which we obtained from the model above. 
+In order to test our hypotheses we look at the coefficients from our posterior samples, which we obtained from the model above using MCMC. 
 
 If a coefficient, say e.g. "b_stimulus_typetarget" of one sample is smaller than 0, this indicates the following:
 Based on our estimates for the real parameters, there is a sample drawn from our posterior distribution for which it is true, that the mean accuracy for the stimulus type "target" is lower than the mean accuracy for the stimulus type "non-target" which is our intercept. 
@@ -317,15 +263,213 @@ Based on our estimates for the real parameters, there is a sample drawn from our
 What we are going to do in order to assess the probabilities of our hypotheses, is, look at the ratio of samples for which a coefficient like e.g. "b_stimulus_typetarget" is smaller than 0.
 
 
-We predict that the accuracy is lower for all kinds of lures than it is for non-targets. We'll accept in a preliminary fashion that our hypotheses are true if the probability that one of the mentioned coefficients is lower than the intercept is at least 95%. 
+We predict that the accuracy is lower for all kinds of lures than it is for non-targets. We'll accept in a preliminary fashion that our hypotheses is true if the probability that one of the mentioned coefficients is lower than the intercept is at least 95%. 
 
+
+```{r}
+accu_complete.mdl.brm
+```
+We can't always tell beforehand which value is chosen as intercept. Therefore this has to be done again after all the data has been collected. But in this case "target" seems to be our intercept.
+
+
+$H1:$ _Lure foils are less probable than non-targets._
 ```{r Calculating probabilities of Hypotheses}
 post.samples = posterior_samples(accu_complete.mdl.brm)
-probabilities = lapply(post.samples[, 1:8], FUN=function(x){return(mean(x<0))})
+#For n3
+p.H1a = mean(post.samples$b_stimulus_typelureMnM1 < post.samples$b_stimulus_typenonMtarget)
+p.H1b = mean(post.samples$b_stimulus_typelureMnP1 < post.samples$b_stimulus_typenonMtarget)
 
-print(probabilities)
+p.hypotheses = data.frame(H1a = p.H1a, H1b = p.H1b)
+
+#For the interaction with n4
+p.H1a.n4 = mean(post.samples$b_stimulus_typelureMnM1 +
+               post.samples$"b_stimulus_typelureMnM1:n4" +
+               post.samples$"b_n4" < post.samples$b_stimulus_typenonMtarget)
+
+p.H1b.n4 = mean(post.samples$b_stimulus_typelureMnP1 +
+               post.samples$"b_stimulus_typelureMnP1:n4" +
+               post.samples$"b_n4" < post.samples$b_stimulus_typenonMtarget)
+
+p.hypotheses = rbind(p.hypotheses, data.frame(H1a = p.H1a.n4, H1b = p.H1b.n4))
+p.hypotheses$n <- as.factor(c(3,4))
+
+print(p.hypotheses)
+```
+For our fake data none of the samples yielded a mean for the coefficients of interests that is higher than the mean for the parameter non-target. Therefore it is likely that both alternative hypotheses $H1_a$ and $H1_b$ should be accepted and $H0$ should be rejected.
+
+
+
+$H1c :$  _Lure foils at n+1 are significantly more accurately classified than lures at n-1._
+
+Now, we can't show that the accuracies for lures at n-1 and n+1 are 'significantly similar'. What we can try to show, at least, is that one is not significantly higher than the other. It is to be kept in mind, however, that this is not an appropriate procedure to conduct hypotheses testing but merely provides an intimation of the relationship between the two kinds of lures. The results will be stored in the column "H1c" below.
+
+```{r}
+
+# Testing wether lures at n+1 are significantly more accurate than lures at n-1
+p.H1c = mean(post.samples$b_stimulus_typelureMnP1 > post.samples$b_stimulus_typelureMnM1)
+#Considering the interaction with and the intercept for n=4
+p.H1c.n4 = mean(post.samples$b_stimulus_typelureMnP1 +
+                  post.samples$"b_stimulus_typelureMnP1:n4"
+                > post.samples$b_stimulus_typelureMnM1 +
+                  post.samples$"b_stimulus_typelureMnM1:n4")
+
+p.hypotheses <- add_column(p.hypotheses, c(p.H1c, p.H1c.n4), .before="n")
+colnames(p.hypotheses)[3] <- "H1c"
+print(p.hypotheses)
 ```
 
-For our fake data we can actually see very high probabilites for our proposed hypotheses. Now the question remains wether our real data will yield the same results. 
 
+
+
+# Code Summary
+```{r echo=TRUE, eval=FALSE}
+library(tidyverse)
+library(rstan)
+library(brms)
+library(lme4)
+options(mc.cores = max(parallel::detectCores()-1, 1)) # at least one core if the machine only has one
+rstan_options(auto_write = TRUE)
+set.seed(100)
+
+data.raw = data.frame(read.csv("fake_data.csv"))
+data_pertinent = subset(data.raw, trial_name != "practice" & trial_number > n)
+data = subset(data_pertinent, select= c(stim_type,correctness,RT,trial_name,n,trial_number,submission_id))
+
+# Removing obviously Faulty Trials 
+grouped = count(group_by(data, submission_id))
+ids_faulty = filter(grouped, n < 200)$submission_id
+data = subset(data, !(submission_id %in% ids_faulty))
+
+#Defining Functions for outlier detection and removal
+#####################################################################################
+normalize = function(data) {
+  mu = mean(data)
+  sig = sd(data)
+  normalized = abs(data - mu)/sig
+  return(normalized)
+}
+
+rosner_outlier_removal = function(data, var.col, crit.value){
+
+  data$normalized = normalize(var.col)
+  maximum = c( max(data$normalized), min(data$normalized) ) %>% abs() %>% max()
+  
+  if(maximum >= crit.value){
+    data <- subset(data, abs(data$normalized) != maximum)
+    return(rosner_test(data, data$normalized, crit.value))
+    
+  } else {
+    return(data)
+  }
+}
+
+get_outliers = function(data, var.col,grouping.variables, crit.value){
+  #woo : "without outliers"
+  data.woo = rosner_outlier_removal(data=data, var.col=var.col, crit.value=crit.value)
+  data.woo = select(data.woo, c(1:(length(names(data.woo)))))
+  
+  all = select(data, grouping.variables)
+  non_outliers = select(data.woo, grouping.variables)
+  outliers = anti_join(all,non_outliers)
+  return(outliers)
+}
+##############################################################################################################################
+mean_rts = aggregate(data$RT, FUN=mean, by=list(data$submission_id, data$n))
+names(mean_rts) = c("submission_id", "n", "x")
+
+outliers = get_outliers(data=mean_rts, var.col=mean_rts$x, 
+                         grouping.variables=c("submission_id", "n"), crit.value=3)
+if(nrow(outliers)>0){
+  for(row in c(1:nrow(outliers))){
+    sprintf("ID: %d, n: %d",outliers$submission_id[row], outliers$n[row] )
+    data <- subset(data, submission_id != outliers$submission_id[row] , n != outliers$n[row])
+  }
+}
+
+# Adding column stim_type_gross
+gross = data$stim_type
+gross = ifelse(data$stim_type == "target", "target", "non-target")
+data$gross_stimtype = gross
+
+#Grouping by ID stim type, trial name and n --- 'nn' is the total number of trials for the specific variable combination of each row
+grouped1 = data %>% group_by(submission_id,stim_type,gross_stimtype,trial_name,n)
+cg1 = count(grouped1)
+#Grouping by correctness for counts of "correct" or "incorrect" --- 'nn' is number of correct trials for the specific variable combination of each row
+grouped2 = grouped1 %>% group_by(correctness, add=TRUE)
+cg2 = count(grouped2)
+# Getting list with unique values to iterate through in the following cells
+IDs = unique(grouped1$submission_id)
+stim_types = unique(grouped1$stim_type)
+gross_stimtypes = unique(grouped1$gross_stimtype)
+trial_names = c("main", "control")
+N = c("3", "4")
+
+# Accuracy table must be a table with the following rows: ID, trial_name, n, stimulus_type, gross_stimulus_type and accuracy
+accuracy_table <- data.frame(matrix(ncol = 6, nrow = 0))
+colnames(accuracy_table) <- c("ID","trial_name", "stimulus_type","gross_stimulus_type","n", "accuracy")
+
+# Defining the right variable types for cols.
+accuracy_table$submission_id <- as.factor(accuracy_table$submission_id)
+accuracy_table$accuracy <- as.numeric(accuracy_table$accuracy)
+accuracy_table$n <- as.factor(accuracy_table$n)
+accu_complete <- subset(accuracy_table, select=c(ID, trial_name, stimulus_type, gross_stimulus_type, n, accuracy))
+
+for(id in IDs){
+  for(n in N){
+    for(st in stim_types){
+    
+      howmanyback = n
+      trial_name = filter(data,submission_id==id)$trial_name[1]
+      gr_st = filter(data, stim_type == st)$gross_stimtype[1]
+      n_correct = sum( filter(cg2, (submission_id == id && stim_type == st) && (n == howmanyback && correctness == "correct"))$nn )
+      n_total = sum( filter(cg2, (submission_id == id && n == howmanyback) && stim_type == st)$nn )
+      accuracy = n_correct/n_total
+      
+      entry = data.frame(submission_id = id, trial_name = trial_name, stimulus_type = st, gross_stimulus_type = gr_st, n = howmanyback, accuracy = accuracy, count = n_total)
+      accu_complete <- rbind(accu_complete, entry)
+    }
+  }
+}
+accu_complete$submission_id <- as.factor(accu_complete$submission_id)
+accu_complete$n <- as.factor(accu_complete$n)
+
+#Plotting Data
+ggplot(accu_complete,mapping=aes(x=gross_stimulus_type, y=accuracy, color=n))+
+  geom_boxplot()
+
+accu_complete <- rosner_outlier_removal(accu_complete, var.col=accu_complete$accuracy, crit.value=3)
+ggplot(data=accu_complete, mapping=aes(x=stimulus_type, y=accuracy, color=n))+
+  geom_boxplot()
+names(accu_complete)
+
+# Creating the Model
+formula = bf(accuracy ~ stimulus_type*n+(1|submission_id)+(1|trial_name),
+          sigma ~ stimulus_type*n+(1|submission_id) + (1|trial_name))
+accu_complete.mdl.brm = brm(formula, data=accu_complete, family="student")
+#Testing Hypotheses
+post.samples = posterior_samples(accu_complete.mdl.brm)
+p.H1a = mean(post.samples$b_stimulus_typelureMnM1 < post.samples$b_stimulus_typenonMtarget)
+p.H1b = mean(post.samples$b_stimulus_typelureMnP1 < post.samples$b_stimulus_typenonMtarget)
+p.hypotheses = data.frame(H1a = p.H1a, H1b = p.H1b)
+# Interaction with n=4
+p.H1a.n4 = mean(post.samples$b_stimulus_typelureMnM1 +
+               post.samples$"b_stimulus_typelureMnM1:n4" +
+               post.samples$"b_n4" < post.samples$b_stimulus_typenonMtarget)
+p.H1b.n4 = mean(post.samples$b_stimulus_typelureMnP1 +
+               post.samples$"b_stimulus_typelureMnP1:n4" +
+               post.samples$"b_n4" < post.samples$b_stimulus_typenonMtarget)
+p.hypotheses = rbind(p.hypotheses, data.frame(H1a = p.H1a.n4, H1b = p.H1b.n4))
+p.hypotheses$n <- as.factor(c(3,4))
+print(p.hypotheses)
+p.H1c = mean(post.samples$b_stimulus_typelureMnP1 > post.samples$b_stimulus_typelureMnM1)
+#Considering the interaction with and the intercept for n=4
+p.H1c.n4 = mean(post.samples$b_stimulus_typelureMnP1 +
+                  post.samples$"b_stimulus_typelureMnP1:n4"
+                > post.samples$b_stimulus_typelureMnM1 +
+                  post.samples$"b_stimulus_typelureMnM1:n4")
+
+p.hypotheses <- add_column(p.hypotheses, c(p.H1c, p.H1c.n4), .before="n")
+colnames(p.hypotheses)[3] <- "H1c"
+print(p.hypotheses)
+```
 
