@@ -10,7 +10,7 @@ The trials are generated in 04_trials.js. The Function that is used to generate 
 The nback trials are based on the template for keypress trials provided by the \_babe framework. The answer_container_generator and response_handler have been modified in 02_custom_functions.js.
 
 ### Analysis
-The rmd file and an associated  html document are located in the "analysis" folder ( what a surprise, huh?). The folder also includes an r script that generates a report for individual subjects who wanted to know their results. The analyses are performed with fake data for demonstrative purposes.
+The rmd file and an associated  html document are located in the "analysis" folder. The folder also includes an r script that generates a report for individual subjects who wanted to know their results. The analyses are performed with fake data for demonstrative purposes.
 
 Analysis:
 http://htmlpreview.github.io/?https://github.com/denizmguen/xplab-project-nback/blob/master/analysis/nback_analysis.html
@@ -19,5 +19,4 @@ Inviduals:
 http://htmlpreview.github.io/?https://github.com/denizmguen/xplab-project-nback/blob/master/analysis/visualization_for_individuals.html
 
 ### Report
-The report is directly accessible as "report.pdf" in the highest folder. :
-https://github.com/denizmguen/xplab-project-nback/blob/master/report.pdf
+https://www.researchgate.net/publication/354023933_Lure_Foils_elicit_Errors_in_numerical_N-Back_Tasks
